@@ -1,0 +1,62 @@
+<section class="s-block s-block--categories mt-10">
+	<div class="container px-4 category">
+		<div class="text-center py-2 w-full mb-2 flex flex-col justify-center items-center md:gap-6 gap-4">
+          <h1 class=" shamelBold md:text-[58px] leading-12  text-[40px]">{{component.title}}</h1>
+          <div class="line"></div>
+
+        </div>
+		<div class="w-full flex items-center justify-center m-auto">
+        {% if component.another_design %}
+        <div class="grid-feattures-category">
+
+				{% for link in component.category_star %}
+
+					<div class="swiper-slide slide--one-sixth cat-hight">
+
+						<a class="flex flex-col justify-center items-center api-set-category gap-4" data-emergence="hidden" href="{{link('redirect/categories/'~link.categories[0])}}">
+							<div class="image flex justify-center items-center rounded-full overflow-hidden">
+								<img class="w-full h-full" src="{{link.image}}"/>
+							</div>
+							<div class="flex flex-col md:gap-2 gap-1 text-center">
+
+							<h4 class="category-name shamelBold md:!text-[24px]">{{link.name}}</h4>
+					
+							<p class=" shamelBook md:!text-[24px]  " style="color : rgba(62, 64, 70, 0.63)">{{link.subname}}</p>
+						</div>
+						</a>
+					</div>
+
+
+				{% endfor %}
+			</div>
+
+        {% else %}
+        <div class="grid-feattures-category-2 justify-around">
+
+				{% for linku in component.category_star %}
+
+
+					<div class="swiper-slide slide--one-sixth cat-hight mb-2">
+						<a class="flex flex-col justify-center items-center api-set-category  gap-4" data-emergence="hidden" href="{{link('redirect/categories/'~linku.categories[0])}}">
+							<img class=" rounded-2xl   bg-cover  w-[80%]" src="{{linku.image}}" style="height: 180px ; border: 4px solid #404553" />
+
+<div class="flex flex-col md:gap-2 gap-1 text-center">
+							<h4 class="category-name shamelBold md:!text-[24px]">{{linku.name}}</h4>
+							
+							<p class=" shamelBook md:!text-2xl  " style="color : rgba(62, 64, 70, 0.63)">{{linku.subname}}</p>
+					</div>
+				
+						</a>
+					</div>
+
+
+				{% endfor %}
+			</div>
+            
+        {% endif %}
+			
+		</div>
+
+	</div>
+
+</section>

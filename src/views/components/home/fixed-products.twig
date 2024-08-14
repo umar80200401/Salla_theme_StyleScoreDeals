@@ -1,0 +1,97 @@
+{#
+| Variable        | Type       | Description                                                      |
+|-----------------|------------|------------------------------------------------------------------|
+| display_all_url | ?string    | If it's existed, mean should show load more link to this url     |
+| title           | string     |                                                                  |
+| products        | Products[] |                                                                  |
+| position        | Int        | Sorting number start from zero                                   |
+| limit           | Int        | Number of products to be shown
+#}
+{% set is_vertical = theme.settings.get('vertical_fixed_products', true) %}
+<section class="s-block container">
+    {% if title %}
+      
+       <div class="text-center py-2 w-full mb-2 flex flex-col justify-center items-center md:gap-6 gap-4">
+          <h1 class=" shamelBold md:text-[58px] md:leading-20 leading-14  md:w-[60%] w-full text-[40px]">{{title}}</h1>
+          <div class="line"></div>
+
+        </div>
+        
+     
+    {% endif %}
+<div class="grid-feattures-pro !gap-8" >
+    {% for product in products %}
+    
+    <div class=" relative flex flex-col justify-start items-center api-set-category gap-2" data-emergence="hidden" >
+              <a href="{{
+                product.url
+              }}" class="w-full h-[245px]  bg-[#D9D9D980] rounded-xl ">
+                <img class="rounded bg-cover  w-full h-full"  src="{{
+                product.image.url
+              }}" alt="{{
+                product.image.alt
+              }}" />
+              </a>
+              <div class="absolute md:top-4 top-1 md:right-3  right-[1px] flex flex-col gap-1 z-10">
+                <div class="wishlist md:h-auto h-[30px]">
+                <salla-button onclick="salla.wishlist.toggle({{
+                product.id
+              }})" shape="icon" fill="outline" color="primary" aria-label="wishlist button" class=" s-button-wrap hydrated">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="53" height="53" viewBox="0 0 47 48" fill="none">
+                  <path d="M23.1506 42.4608L20.3714 39.8758C10.5006 30.7304 3.98389 24.6987 3.98389 17.2962C3.98389 11.2646 8.62222 6.52539 14.5256 6.52539C17.8606 6.52539 21.0614 8.11164 23.1506 10.6183C25.2397 8.11164 28.4406 6.52539 31.7756 6.52539C37.6789 6.52539 42.3172 11.2646 42.3172 17.2962C42.3172 24.6987 35.8006 30.7304 25.9297 39.8954L23.1506 42.4608Z" fill="#212121"/>
+                  </svg>
+                </salla-button>
+              </div>
+              <div class="quickview-btn eye-icon flex justify-center items-center" onclick="app.clickModal({{product.id}})" >
+                  <salla-button  fill="outline"  class="s-button-wrap hydrated " shape="btn" color="primary" size="medium" width="normal">
+          
+                  <svg xmlns="http://www.w3.org/2000/svg" width="44" height="45" viewBox="0 0 44 45" fill="none">
+                  <path d="M21.6507 8.90039C12.6924 8.90039 5.04197 14.6021 1.94238 22.6504C5.04197 30.6987 12.6924 36.4004 21.6507 36.4004C30.6091 36.4004 38.2595 30.6987 41.3591 22.6504C38.2595 14.6021 30.6091 8.90039 21.6507 8.90039ZM21.6507 31.8171C16.7057 31.8171 12.6924 27.7104 12.6924 22.6504C12.6924 17.5904 16.7057 13.4837 21.6507 13.4837C26.5957 13.4837 30.6091 17.5904 30.6091 22.6504C30.6091 27.7104 26.5957 31.8171 21.6507 31.8171ZM21.6507 17.1504C18.6765 17.1504 16.2757 19.6071 16.2757 22.6504C16.2757 25.6937 18.6765 28.1504 21.6507 28.1504C24.6249 28.1504 27.0257 25.6937 27.0257 22.6504C27.0257 19.6071 24.6249 17.1504 21.6507 17.1504Z" fill="#212121"/>
+                  </svg>
+          
+                  </salla-button>
+              </div>
+             </div>
+							<div class="flex flex-col items-center justify-center  w-full gap-1">
+  <div class="w-full rounded-md bg-[#334155] flex items-center justify-center shamelBook font-bold text-[32px] ">
+				
+            <salla-add-product-button width="wide" product-id="{{
+                product.id
+              }}">
+            </salla-add-product-button>
+          </div>
+							<p class="category-name text-center text-xl shamelBook">{{
+                product.name
+              }}</p>
+              <div class="flex justify-center items-center">
+              {% if product.is_on_sale %}
+              <div class="shamelBold flex justify-center items-center gap-2 ">
+                  <h4 class=" text-center text-[#F77171]">{{ product.sale_price|money }}</h4>
+                  <span class="before-sale text-center line-through  font-bold text-[#404553] relative">
+                
+               {{ product.regular_price|money }}
+                </span>
+                  
+                </div>
+          
+        {% else %}
+            <h4 class="shamelBold">{{ product.price|money }}</h4>
+        {% endif %}
+             
+							
+							
+							</div>
+              </div>
+		</div>
+    
+    
+{% endfor %}
+</div>
+{% if display_all_url %}
+            <a href="{{ display_all_url }}" class="s-block__display-all">{{ trans('blocks.home.display_all') }} <i class="sicon-arrow-left"></i></a>
+    {% endif %}
+</section>
+
+
+
+

@@ -1,0 +1,148 @@
+{#
+| Variable                 | Type      | Description                                                         |
+|--------------------------|-----------|---------------------------------------------------------------------|
+| items                    | array     |                                                                     |
+| items[].title            | string    | Section title                                                       |
+| items[].name             | string    | Alias for title                                                     |
+| items[].type             | string    | category,most_sales,latest_products,chosen_products                 |
+| items[].featured_product | Null      |                                                                     |
+| items[].products[]       | Product[] |                                                                     |
+| items[].limit            | Int       | Number of products to be shown                                      |
+| items[].id               | string    | Section id                                                          |
+| main_product             | array     |                                                                     |
+| main_product.id          | string    | string product id                                                   |
+| main_product.title       | string    | Offer title                                                         |
+| main_product.value       | string    | Product Name                                                        |
+| main_product.product     | Product   |                                                                     |
+| position                 | int       | sorting block                                                       |
+#}
+{% set component_id='featured-products-style1-' ~ position %}
+<section class="s-block s-block-tabs s-block--special-products category-three container" id="{{ component_id }}">
+    <div class="s-block__title"> 
+      <div class="right-side relative">
+        <h2 class="shamelBold md:!text-[48px] py-1 !text-[38px] after:absolute after:-bottom-4 after:left-0 after:w-full mb-4 after:rounded  after:h-[10px] after:bg-[#334155]">{{ main_product.title }}</h2>
+      </div>
+      <div class="tabs hide-scroll hidden  lg:flex shamelBook text-[40px] !text-[#424347]  py-3">
+          {% for section in items %}
+              <salla-button shape="link"
+                      data-target="{{ component_id }}-{{ section.id }}"
+                      data-component-id="{{ component_id }}"
+                      class="tab-trigger {{ loop.first?'is-active' : '' }}">
+                  {{ section.title }}
+              </salla-button>
+          {% endfor %}
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 {{ main_product?'lg:grid-cols-2':''}} gap-8">
+        {% if main_product %}
+      <div class="flex flex-col">
+
+            <custom-salla-product-card bigProduct product="{{main_product.product}}"></custom-salla-product-card>
+    </div>
+
+        {% endif %}
+        <div class="flex flex-col">
+            <div class="tabs mb-4 sm:mb-8 hide-scroll lg:hidden shamelBook text-[25px] !text-[#424347] py-2">
+                {% for section in items %}
+                    <salla-button shape="link"
+                            data-target="{{ component_id }}-{{ section.id }}"
+                            data-component-id="{{ component_id }}"
+                            class="tab-trigger {{ loop.first?'is-active':'' }}">
+                        {{ section.title }}
+                    </salla-button> 
+                {% endfor %}
+            </div>
+
+            <div class="tabs-wrapper flex flex-1">
+
+                {% for section in items %}
+                     
+                    <div id="{{ component_id }}-{{ section.id }}" class="tabs__item grid-cols-2 {{ main_product?'':'lg:grid-cols-4'}} {{ loop.first?'is-active':'' }}">
+                        {% for product in section.products|slice(0,main_product?4:8) %}
+                           
+              <div  class="product-entry product-entry--minimal flex flex-col items-center justify-center overflow-hidden " style=" border-radius : 40px ; background-color : #EAE9E9">
+              <div class=" w-full md:h-72 h-40" style=" ">
+                <a href="{{product.url}}">
+                  <img class=" bg-cover w-full h-full lazy loaded" src="{{product.image.url}}" alt=" {{product.image.alt}} " loading="lazy" >
+                </a>
+              </div>
+                     <div class="flex gap-1 flex-col items-center justify-center  mt-auto absolute" style=" top: 18px ; right:7px">
+          
+          <div class="wishlist h-[30px] w-[30px] flex justify-center items-center" >
+          <salla-button onclick="salla.wishlist.toggle({{product.id}})" shape="icon" fill="outline" color="primary" aria-label="wishlist button" class=" s-button-wrap hydrated">
+            <svg xmlns="http://www.w3.org/2000/svg" width="47" height="48" viewBox="0 0 47 48" fill="none">
+            <path d="M23.1506 42.4608L20.3714 39.8758C10.5006 30.7304 3.98389 24.6987 3.98389 17.2962C3.98389 11.2646 8.62222 6.52539 14.5256 6.52539C17.8606 6.52539 21.0614 8.11164 23.1506 10.6183C25.2397 8.11164 28.4406 6.52539 31.7756 6.52539C37.6789 6.52539 42.3172 11.2646 42.3172 17.2962C42.3172 24.6987 35.8006 30.7304 25.9297 39.8954L23.1506 42.4608Z" fill="#212121"/>
+            </svg>
+          </salla-button>
+        </div>
+        
+                <div class="quickview-btn eye-icon h-[30px] w-[30px] flex justify-center items-center" onclick="app.clickModal({{product.id}})"  data-product-id="{{product.id}}">
+                    <salla-button  fill="outline"  class="s-button-wrap hydrated flex justify-center items-center" shape="btn" color="primary" size="medium" width="normal">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="44" height="45" viewBox="0 0 44 45" fill="none">
+                    <path d="M21.6507 8.90039C12.6924 8.90039 5.04197 14.6021 1.94238 22.6504C5.04197 30.6987 12.6924 36.4004 21.6507 36.4004C30.6091 36.4004 38.2595 30.6987 41.3591 22.6504C38.2595 14.6021 30.6091 8.90039 21.6507 8.90039ZM21.6507 31.8171C16.7057 31.8171 12.6924 27.7104 12.6924 22.6504C12.6924 17.5904 16.7057 13.4837 21.6507 13.4837C26.5957 13.4837 30.6091 17.5904 30.6091 22.6504C30.6091 27.7104 26.5957 31.8171 21.6507 31.8171ZM21.6507 17.1504C18.6765 17.1504 16.2757 19.6071 16.2757 22.6504C16.2757 25.6937 18.6765 28.1504 21.6507 28.1504C24.6249 28.1504 27.0257 25.6937 27.0257 22.6504C27.0257 19.6071 24.6249 17.1504 21.6507 17.1504Z" fill="#212121"/>
+                    </svg>
+
+                    </salla-button>
+                </div>
+              <div class="addToCart h-[30px] w-[30px] flex justify-center items-center">
+                <salla-add-product-button shape="icon" class="addToCart__btn hydrated flex justify-center " product-id="{{product.id}}" product-status="sale" fill="outline" product-type="product">
+                <svg xmlns="http://www.w3.org/2000/svg" width="31" height="36" viewBox="0 0 31 36" fill="none">
+<path d="M15.6794 13.5916H18.6821V8.53302H23.1861V5.16063H18.6821V0.102051H15.6794V5.16063H11.1754V8.53302H15.6794V13.5916ZM9.67405 28.7673C8.02258 28.7673 6.68639 30.2849 6.68639 32.1397C6.68639 33.9946 8.02258 35.5121 9.67405 35.5121C11.3255 35.5121 12.6767 33.9946 12.6767 32.1397C12.6767 30.2849 11.3255 28.7673 9.67405 28.7673ZM24.6874 28.7673C23.036 28.7673 21.6998 30.2849 21.6998 32.1397C21.6998 33.9946 23.036 35.5121 24.6874 35.5121C26.3389 35.5121 27.6901 33.9946 27.6901 32.1397C27.6901 30.2849 26.3389 28.7673 24.6874 28.7673ZM11.3255 20.3364H22.5105C23.6365 20.3364 24.6274 19.645 25.1378 18.5996L30.933 6.77938L28.3207 5.16063L22.5105 16.964H11.9711L5.57539 1.78824H0.666016V5.16063H3.66869L9.07351 17.9588L7.04671 22.0732C5.95073 24.3327 7.39201 27.0812 9.67405 27.0812H27.6901V23.7088H9.67405L11.3255 20.3364Z" fill="black"/>
+</svg>
+                </salla-add-product-button>
+              </div>
+            </div>
+
+              <div class="flex flex-col flex-1 p-2   px-4 product-entry__content justify-between items-center gap-1">
+              
+              <div class="flex flex-col flex-1 p-2   px-4 product-entry__content justify-center items-center gap-2">
+              <h3 class="product-entry__title leading-6 flex justify-center items-center w-full  max-w-full">
+                  <a href="{{product.url}}" class=" shamelBook md:!text-[24px] text-center !text-[18px] leading-8">{{product.name}}</a>
+            
+                </h3>
+                <div class="starss">
+  
+              <salla-rating-stars size="large" value="{{ product.rating.stars }}"
+                                        reviews="{{ product.rating.count }}"></salla-rating-stars>
+                       
+              
+              </div>
+  
+                <div class="w-full  flex justify-center items-center shamelBold md:text-[20px] text-[17px] gap-2">
+                 {% if product.is_on_sale %}
+              <div class="shamelBold flex justify-center items-center gap-2 md:text-[20px] text-[15px]  ">
+                  <h4 class=" text-center text-[#F77171]">{{ product.sale_price|money }}</h4>
+                  <span class="before-sale text-center line-through font-bold text-[#404553] relative">
+                
+               {{ product.regular_price|money }}
+                </span>
+                  
+                </div>
+          
+        {% else %}
+            <h4 class="shamelBold">{{ product.price|money }}</h4>
+        {% endif %}
+                  
+                   
+                    
+                </div>
+                </div>
+                <div class="md:w-full px-4 rounded-md py-1 w- mb-2 bg-[#334155] flex items-center justify-center">
+				
+              <salla-add-product-button width="wide" product-id="{{product.id}}">
+              </salla-add-product-button>
+            </div>
+                
+                
+              </div>
+            </div>
+             
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section> 

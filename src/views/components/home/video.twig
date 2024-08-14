@@ -1,0 +1,13 @@
+<section class="s-block s-block--video relative ">
+        <video class="object-cover object-center  w-full h-full min-h-[250px] max-h-[350px] lg:max-h-[700px]" playsinline loop="loop" src="{{component.video_banner}}" autoplay="autoplay" muted="muted"></video>
+        <div class="absolute flex items-center w-full px-3 md:bottom-[50%] bottom-[37%]" style="justify-content : center">
+                <h1 class="text-white md:text-4xl md:!leading-12 leading-8 shamelBold md:w-[60%] text-xl text-center">{{component.title}}</h1>
+	</div>
+{% if component.button %}
+     <a href="{{component.url}}" class="absolute flex items-center w-full px-3 lg:bottom-56 md:bottom-10 bottom-6 " style="justify-content : {{component.button_posistion|json_encode()|split('"')[1]}}">
+		<button class="w-1/3 text-md md:py-6 py-4 font-bold text-center rounded-lg lg:w-2/12 lg:text-xl " style="color:{{component.text_color_button}} ; background-color : {{component.background_button_color}}">{{component.button}}</button>
+	</a>    
+{% endif %}
+       
+</section>
+

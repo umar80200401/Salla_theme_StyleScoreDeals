@@ -1,0 +1,15 @@
+<section class="s-block head-edit s-block--hero-slider s-block--full-bg wide-placeholder home-slider photo-slider-hero mb-5 overflow-hidden">
+	<div class="{{ component.is_container ? "container" : " "}} mx-auto">
+        <a class="w-full max-h-[640px] min-h-[250px] relative block" href="{{component.url}}">
+            <img src="{{ component.image }}" class="w-full max-h-[640px] min-h-[250px] {{ component.is_rounded ? "rounded" : " "}}"/>
+            <div class="absolute flex items-center w-full px-3 bottom-3" style="justify-content : {{component.button_position|json_encode()|split('"')[1]}}">
+                {% if component.button %}
+                    <button class="py-2 shamelBold md:py-5 px-5 text-[20px] text-white bg-white font-bold text-center rounded-xl   md:h-[80.9px]  md:w-56 md:text-[35px] " style="color:{{component.text_color_button}} ; background-color : {{component.background_button_color}}">
+                        {{component.button}}
+                    </button>
+                {% endif %}
+                
+            </div>
+        </a>
+    </div>
+</section>

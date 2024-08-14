@@ -1,0 +1,71 @@
+{
+  "blocks": {
+    "header": {
+      "cart": "Cart"
+    },
+    "appBanner": {
+      "download_now": "Download now"
+    }
+  },
+  "common": {
+    "bank_offer_sub_title_multiple": "Pay for your purchases via one of the following bank cards and get the specified discount",
+    "bank_offer_sub_title_single": "Pay for your purchases via :bank_name bank card and get discount"
+  },
+
+  "slider": {
+    "list_brand": {
+      "brands": "Brands"
+    }
+  },
+
+  "home_page": {
+    "limit_product": {
+      "remain_time": "The remaining time"
+    },
+    "customer_opinion": {
+      "rating": "Customer opinions"
+    }
+  },
+  "navbar_top": {
+    "cart_modal": {
+      "continueYourOrder": "Continue your order"
+    }
+  },
+  "navbar_bottom": {
+    "links": {
+      "cart": "Cart",
+      "discount": "Discount",
+      "categories": "Categories",
+      "home": "home"
+    }
+  },
+  "footer": {
+    "new_letters": {
+      "subscribe": "Subscribe",
+      "email": "Email Address"
+    },
+    "business_cert": {
+      "business": "Verified on SBC "
+    }
+  },
+  "cart_page": {
+    "content": {
+      "empty_cart": "Your shopping cart is empty",
+      "login_for_shopping": "Log in to view your shopping cart and start shopping",
+      "shopping": "Shopping"
+    }
+  },
+  "product_details": {
+    "details": {
+      "sale_status_false": "Not Available",
+      "sale_status_true": "Available",
+      "remain": "Remain"
+    },
+    "SimilarProducts": {
+      "similar_products": "Similar products"
+    }
+  },
+  "categories": {
+    "title": "Category Title"
+  }
+}

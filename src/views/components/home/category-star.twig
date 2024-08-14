@@ -1,0 +1,30 @@
+
+
+<section class="s-block s-block--categories mt-10">
+	<div class="container px-4 category">
+		<div class="text-center py-2 w-full mb-2 flex flex-col justify-center items-center md:gap-6 gap-4">
+          <h1 class=" shamelBold md:text-[58px] leading-12  text-[40px]">{{component.title}}</h1>
+          <div class="line"></div>
+
+        </div>
+		{% if component.first_design %}
+       
+        {% component 'header.menu' with {'isCategoryStar': true   } %}
+            
+        {% endif %}
+
+        {% if component.second_design %}
+        
+        {% component 'header.menu' with {'isCategoryStar2': true   } %}
+            
+        {% endif %}
+
+
+
+        
+	</div>
+
+</section>
+
+
+

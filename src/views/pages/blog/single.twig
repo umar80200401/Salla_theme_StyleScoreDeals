@@ -1,0 +1,98 @@
+{#
+| Variable                | Type           | Description |
+|-------------------------|----------------|-------------|
+| article.title           | string         |             |
+| article.body            | string *HTML   |             |
+| article.url             | string         |             |
+| article.has_image       | Bool           |             |
+| article.image           | object         |             |
+| article.image.url       | string         |             |
+| article.image.alt       | string         |             |
+| article.thumbnail       | string         |             |
+| article.created_at      | ?Date *Carbon  |             |
+| article.author.name     | string         |             |
+| article.author.url      | string         |             |
+| article.related         | Article[]      |             |
+| article.tags            | BlogTag[]      |             |
+| article.tags[].name     | string         |             |
+| article.tags[].url      | string         |             |
+#}
+{% extends "layouts.master" %}
+{% block content %}
+    <div class="container mb-8 sm:mb-24">
+        {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
+        <nav class="breadcrumbs w-full py-5 center-between">
+            <salla-breadcrumb></salla-breadcrumb>
+        </nav>
+        <div class="grid grid-cols-1">
+            <div class="main-content blog-category flex-1 bg-white p-8 rounded-md mb-10 md:mb-0">
+                {% if article.has_image %}
+                    <img src="{{ article.image.url }}" alt="{{ article.image.alt }}" title="{{ article.image.alt }}"
+                         class="max-h-[520px] mb-10 w-full object-cover rounded-md"/>
+                {% endif %}
+                <h1 class="font-bold text-3xl mb-5 leading-10">{{ article.title }}</h1>
+                
+                <article class="leading-7 text-lg mb-4">{{ article.body|raw }}</article>
+              
+            </div>
+
+            <aside aria-label="Sidebar" class="sticky shrink-0 top-24 rtl:lg:mr-8 ltr:lg:ml-8 pb-11">
+                {% if related|length %}
+                    <h2 class="font-bold mb-3 text-center mx-auto w-max text-2xl relative pb-2 after:absolute after:-bottom-4 after:right-0 after:w-full after:h-[10px] after:rounded-lg after:bg-[#404553]">{{ trans('pages.blog_articles.related') }}</h2>
+
+                    {% hook 'blog:single.items.start' %}
+
+                   
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-14">
+                        {% for article in related %}
+                            <div class='list-block post-entry relative h-full transition-shadow duration-500  hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col p-4 pb-2 bg-[#D9D9D9]'>
+                                <a href="{{ article.url }}"
+                                   class='post-entry__image relative overflow-hidden hover:opacity-90 w-full h-56 bg-border-color flex items-center justify-center'>
+                                    <img class="{{ article.image.url|is_placeholder?'sm:h-full w-20 object-contain opacity-60':'h-full w-full object-cover' }}"
+                                         src="{{ article.image.url }}"
+                                         alt="{{ article.image.alt }}">
+                                </a>
+    
+                                <div class="flex-1 px-5 pt-5 pb-0">
+                                    <div class="mb-2.5 text-gray-500 rounded-md inline-flex text-sm rtl:space-x-reverse space-x-5">
+                                        <div class="flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="35" viewBox="0 0 70 65" fill="none" class="text-black">
+                                                <path d="M57.918 8.12565H55.043V2.70898H49.293V8.12565H20.543V2.70898H14.793V8.12565H11.918C8.75547 8.12565 6.16797 10.5632 6.16797 13.5423V56.8757C6.16797 59.8548 8.75547 62.2923 11.918 62.2923H57.918C61.0805 62.2923 63.668 59.8548 63.668 56.8757V13.5423C63.668 10.5632 61.0805 8.12565 57.918 8.12565ZM57.918 56.8757H11.918V27.084H57.918V56.8757ZM57.918 21.6673H11.918V13.5423H57.918V21.6673Z" fill="#212121"/>
+                                            </svg>
+                                            <span class=" font-black text-black">{{ article.created_at|date }}</span>
+                                        </div>
+                                        <a href="{{ article.author.url }}" class="flex items-center hover:text-dark">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="45" viewBox="0 0 88 83" fill="none" class="text-black">
+                                                <path d="M43.7148 14.1079C44.7145 14.1079 45.7044 14.2958 46.628 14.6608C47.5516 15.0257 48.3908 15.5607 49.0977 16.2351C49.8046 16.9095 50.3653 17.7101 50.7479 18.5912C51.1304 19.4723 51.3273 20.4167 51.3273 21.3704C51.3273 22.3242 51.1304 23.2686 50.7479 24.1497C50.3653 25.0308 49.8046 25.8314 49.0977 26.5058C48.3908 27.1802 47.5516 27.7151 46.628 28.0801C45.7044 28.4451 44.7145 28.6329 43.7148 28.6329C41.6959 28.6329 39.7596 27.8678 38.332 26.5058C36.9044 25.1438 36.1023 23.2966 36.1023 21.3704C36.1023 19.4443 36.9044 17.5971 38.332 16.2351C39.7596 14.8731 41.6959 14.1079 43.7148 14.1079ZM43.7148 45.2329C54.4811 45.2329 65.8273 50.2821 65.8273 52.4954V56.2996H21.6023V52.4954C21.6023 50.2821 32.9486 45.2329 43.7148 45.2329ZM43.7148 7.53711C35.7036 7.53711 29.2148 13.7275 29.2148 21.3704C29.2148 29.0134 35.7036 35.2038 43.7148 35.2038C51.7261 35.2038 58.2148 29.0134 58.2148 21.3704C58.2148 13.7275 51.7261 7.53711 43.7148 7.53711ZM43.7148 38.6621C34.0361 38.6621 14.7148 43.2963 14.7148 52.4954V62.8704H72.7148V52.4954C72.7148 43.2963 53.3936 38.6621 43.7148 38.6621Z" fill="#212121"/>
+                                            </svg>
+                                            <span class=" font-black text-black">{{ article.author.name }}</span>
+                                        </a>
+                                    </div>
+    
+                                    <h3 class="post-entry__title text-lg font-normal leading-6">
+                                        <a href="{{ article.url }}">{{ article.title }}</a>
+                                    </h3>
+                                    
+                                </div>
+    
+                                {% if article.tags|length %}
+                                    <div class="px-4 py-0 flex flex-wrap items-center">
+                                        {% for tag in article.tags %}
+                                            <a href="{{ tag.url }}"
+                                                class="py-2 px-4 rounded-large inline-flex items-center text-gray-500 hover:text-dark justify-center text-sm">
+                                                <i class="font-medium sicon-tag rtl:ml-1.5 ltr:mr-1.5 text-xl"></i>
+                                                <span class="fix-align whitespace-nowrap text-xl font-extrabold text-black">{{ tag.name }}</span>
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {% hook 'blog:single.items.end' %}
+                {% endif %}
+            </aside>
+        </div>
+    </div>
+{% endblock %}

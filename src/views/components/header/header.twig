@@ -1,0 +1,294 @@
+{#
+| Variable         | Type    | Description                     |
+|------------------|---------|---------------------------------|
+| cart             | object  |                                 |
+| cart.items_count | int     |                                 |
+| cart.total       | string  | Formatted total ex: "١٠٠ ر.س"   |
+#}
+
+<style>
+:root{
+	--add_to_cart_button_colour: {{theme.settings.get('add_to_cart_button_colour')}};
+}
+salla-button#cart-submit {background-color:var(--add_to_cart_button_colour);}
+salla-button#cart-submit a span.s-button-text {color:#FFF !important;}
+</style>
+
+{% set important_links = theme.settings.get('important_links') %}
+
+<header
+	class="store-header">
+	{# Top Nav #}
+	<div class="top-navbar">
+		<div class="container flex justify-between">
+			<div class="flex-1 flex items-center rtl:space-x-reverse space-x-2">
+				{# Footer Menu #}
+			
+					<div
+					class="header-buttons second flex"> {# Language & Currency Component #}
+
+					{% if store.settings.is_multilingual or store.settings.is_multilingual %}
+						<button type="button" onclick="salla.event.dispatch('localization::open')" class="flex justify-center items-center gap-2 bg-transparent">
+							<svg xmlns="http://www.w3.org/2000/svg" width="25" height="1.7em" viewbox="0 0 55 54" fill="none">
+								<g clip-path="url(#clip0_177_5060)">
+									<path d="M27.6434 0.0859375C12.8718 0.0859375 0.910095 12.0744 0.910095 26.846C0.910095 41.6175 12.8718 53.606 27.6434 53.606C42.4417 53.606 54.4302 41.6175 54.4302 26.846C54.4302 12.0744 42.4417 0.0859375 27.6434 0.0859375ZM46.1881 16.142H38.2939C37.4564 12.8276 36.2162 9.62829 34.601 6.61539C39.4823 8.29593 43.5955 11.6777 46.1881 16.142ZM27.6701 5.54499C29.8912 8.75619 31.6306 12.3153 32.7813 16.142H22.559C23.7097 12.3153 25.4491 8.75619 27.6701 5.54499ZM6.95787 32.198C6.52971 30.4854 6.26211 28.6924 6.26211 26.846C6.26211 24.9995 6.52971 23.2066 6.95787 21.494H16.0028C15.7887 23.2601 15.6281 25.0263 15.6281 26.846C15.6281 28.6657 15.7887 30.4318 16.0028 32.198H6.95787ZM9.15219 37.55H17.0464C17.9027 40.895 19.1337 44.1062 20.7393 47.0766C15.8528 45.4052 11.7368 42.0211 9.15219 37.55ZM17.0464 16.142H9.15219C11.7368 11.6708 15.8528 8.28674 20.7393 6.61539C19.1241 9.62829 17.8839 12.8276 17.0464 16.142ZM27.6701 48.147C25.4491 44.9358 23.7097 41.3767 22.559 37.55H32.7813C31.6306 41.3767 29.8912 44.9358 27.6701 48.147ZM33.932 32.198H21.4083C21.1675 30.4318 20.9801 28.6657 20.9801 26.846C20.9801 25.0263 21.1675 23.2334 21.4083 21.494H33.932C34.1728 23.2334 34.3602 25.0263 34.3602 26.846C34.3602 28.6657 34.1728 30.4318 33.932 32.198ZM34.601 47.0766C36.2066 44.1062 37.4376 40.895 38.2939 37.55H46.1881C43.5955 42.0143 39.4823 45.396 34.601 47.0766ZM39.3375 32.198C39.5516 30.4318 39.7122 28.6657 39.7122 26.846C39.7122 25.0263 39.5516 23.2601 39.3375 21.494H48.3824C48.8106 23.2066 49.0782 24.9995 49.0782 26.846C49.0782 28.6924 48.8106 30.4854 48.3824 32.198H39.3375Z" fill="#334155"/>
+								</g>
+								<defs>
+									<clipPath id="clip0_177_5060">
+										<rect width="53.5201" height="53.5201" fill="white" transform="translate(0.910095 0.0859375)"/>
+									</clipPath>
+								</defs>
+							</svg>
+							<div class="flex items-end">
+								<h4>{{user.language.name}}</h4>
+								<svg class="down-drop" xmlns="http://www.w3.org/2000/svg" fill="#000000" width="17px" height="13px" viewbox="0 0 24 24"><path d="M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13z"/></svg>
+								{# <div>{{theme.settings.get("font_setting")}}</div> #}
+							</div>
+							<div class="mx-2" style="width:5px;background-color:#334155;height:100%"></div>
+
+							<svg xmlns="http://www.w3.org/2000/svg" height="1.1em" viewbox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 31.4C369.3 204.9 384 221.7 384 240c0 4-.7 7.9-2.1 11.7c-4.6 13.2-17 25.3-35 35.5c0 0 0 0 0 0c-.1 .1-.3 .1-.4 .2l0 0 0 0c-.3 .2-.6 .3-.9 .5c-35 19.4-90.8 32-153.6 32c-59.6 0-112.9-11.3-148.2-29.1c-1.9-.9-3.7-1.9-5.5-2.9C14.3 274.6 0 258 0 240c0-34.8 53.4-64.5 128-75.4c10.5-1.5 21.4-2.7 32.7-3.5zM416 240c0-21.9-10.6-39.9-24.1-53.4c28.3-4.4 54.2-11.4 76.2-20.5c16.3-6.8 31.5-15.2 43.9-25.5V176c0 19.3-16.5 37.1-43.8 50.9c-14.6 7.4-32.4 13.7-52.4 18.5c.1-1.8 .2-3.5 .2-5.3zm-32 96c0 18-14.3 34.6-38.4 48c-1.8 1-3.6 1.9-5.5 2.9C304.9 404.7 251.6 416 192 416c-62.8 0-118.6-12.6-153.6-32C14.3 370.6 0 354 0 336V300.6c12.5 10.3 27.6 18.7 43.9 25.5C83.4 342.6 135.8 352 192 352s108.6-9.4 148.1-25.9c7.8-3.2 15.3-6.9 22.4-10.9c6.1-3.4 11.8-7.2 17.2-11.2c1.5-1.1 2.9-2.3 4.3-3.4V304v5.7V336zm32 0V304 278.1c19-4.2 36.5-9.5 52.1-16c16.3-6.8 31.5-15.2 43.9-25.5V272c0 10.5-5 21-14.9 30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4 148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5V432c0 44.2-86 80-192 80S0 476.2 0 432V396.6c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/></svg>
+							<div class="flex items-end">
+								<h4>{{ currency.name }}</h4>
+								<svg class="down-drop" xmlns="http://www.w3.org/2000/svg" fill="#000000" width="17px" height="13px" viewbox="0 0 24 24"><path d="M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13z"/></svg>
+								</div></button>
+								<salla-localization-modal></salla-localization-modal>
+							{% endif %}
+
+						</div>
+
+						{# Scopes | Branches #}
+						{% if store.scope %}
+							<button class="btn--rounded-gray" onclick="salla.event.dispatch('scopes::open', {'mode': 'default'})">
+								<i class="sicon-location rtl:ml-1 ltr:mr-1"></i>
+								{{ store.scope.name }}
+							</button>
+						{% endif %}
+
+						{# Search Component #}
+
+						<div id="search-finish" class="search-finish search-icon-header-1   flex  w-full">
+
+
+							<div class=" w-full flex justify-center items-center h-20 ">
+
+								<div id="close-search" class="flex">
+									<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewbox="0 0 24 24">
+										<path d="M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z"></path>
+									</svg>
+								</div>
+								<salla-search inline oval height="50"></salla-search>
+
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+
+			</div>
+		</div>
+		{# Main Nav #}
+		<div id="mainnav" class="main-nav-container shadow-default bg-white">
+			<div class="inner bg-inherit">
+				<div class="container py-1">
+					<div class="flex items-center justify-between relative">
+					
+					
+
+					
+
+						<div class="flex items-center">
+							<a class="block lg:hidden mburger mburger--collapse leading-none" href="#mobile-menu">
+								<i class="{{theme.settings.get("sidebar_icon")}} text-primary text-2xl rtl:ml-2.5 ltr:mr-2.5"></i>
+							</a>
+							<div  class="md:hidden flex">
+							{% if user.type=='user' %}
+    <salla-user-menu avatar-only show-header></salla-user-menu>
+    {% else %}
+    <button
+      onclick="salla.event.dispatch('login::open')"
+      class="header-btn inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group"
+    >
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+				<path d="M12 5.93613C12.2758 5.93613 12.5489 5.99045 12.8036 6.09599C13.0584 6.20152 13.2899 6.35621 13.4849 6.55121C13.6799 6.74621 13.8346 6.97771 13.9401 7.2325C14.0457 7.48728 14.1 7.76036 14.1 8.03613C14.1 8.31191 14.0457 8.58498 13.9401 8.83977C13.8346 9.09455 13.6799 9.32605 13.4849 9.52106C13.2899 9.71606 13.0584 9.87075 12.8036 9.97628C12.5489 10.0818 12.2758 10.1361 12 10.1361C11.443 10.1361 10.9089 9.91488 10.5151 9.52106C10.1212 9.12723 9.9 8.59309 9.9 8.03613C9.9 7.47918 10.1212 6.94503 10.5151 6.55121C10.9089 6.15738 11.443 5.93613 12 5.93613ZM12 14.9361C14.97 14.9361 18.1 16.3961 18.1 17.0361V18.1361H5.9V17.0361C5.9 16.3961 9.03 14.9361 12 14.9361ZM12 4.03613C9.79 4.03613 8 5.82613 8 8.03613C8 10.2461 9.79 12.0361 12 12.0361C14.21 12.0361 16 10.2461 16 8.03613C16 5.82613 14.21 4.03613 12 4.03613ZM12 13.0361C9.33 13.0361 4 14.3761 4 17.0361V20.0361H20V17.0361C20 14.3761 14.67 13.0361 12 13.0361Z" fill="#212121"/>
+			</svg>
+    </button>
+    {% endif %}
+							</div>
+							<a
+								class="navbar-brand" href="{{ store.url }}">
+								<img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ store.logo }}" alt="{{ store.name }}">
+								{% if is_page('index') %}																																																																																																																																																																																																								                            
+								<h1 class="sr-only">{{ store.name }}</h1>																																																																																																																																																																																																								                              
+								{% else %}																																																																																																																																																																																																								                            
+							<h2 class="sr-only">{{ store.name }}</h2>																																																																																																																																																																																																						
+						  		{% endif %}
+							
+							</a>
+						</div>
+						<div class="header-search flex-1 flex justify-center items-center">
+							<salla-search class="relative" inline oval height="36">
+								<div id="search-close" class="absolute z-[999] top-[4px] left-[10px] cursor-pointer" style="display: none;">
+									<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+										<title>cancel</title>
+										<path d="M17.885 16l7.057-7.057c0.521-0.521 0.521-1.364 0-1.885s-1.364-0.521-1.885 0l-7.057 7.057-7.057-7.057c-0.521-0.521-1.364-0.521-1.885 0s-0.521 1.364 0 1.885l7.057 7.057-7.057 7.057c-0.521 0.521-0.521 1.364 0 1.885 0.26 0.26 0.601 0.391 0.943 0.391s0.683-0.131 0.943-0.391l7.057-7.057 7.057 7.057c0.26 0.26 0.601 0.391 0.943 0.391s0.683-0.131 0.943-0.391c0.521-0.521 0.521-1.364 0-1.885z"></path>
+									</svg>
+								</div>
+							</salla-search>
+						</div>
+						<div class="icons-header !hidden md:!flex gap-2">
+							<div class="flex items-center justify-center login-button">
+								{% if user.type=='user' %}
+									<salla-user-menu avatar-only show-header></salla-user-menu>
+								{% else %}
+									<button class="header-btn" onclick="salla.event.dispatch('login::open')">
+										<i class="header-btn__icon">
+											<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 83 84" fill="none">
+												<path d="M41.5 45.5C32.2663 45.5 13.8333 50.19 13.8333 59.5V70H69.1667V59.5C69.1667 50.19 50.7338 45.5 41.5 45.5ZM62.5958 63.35H20.4042V59.5C20.4042 57.26 31.2288 52.15 41.5 52.15C51.7713 52.15 62.5958 57.26 62.5958 59.5V63.35ZM41.5 42C49.1429 42 55.3333 35.735 55.3333 28C55.3333 20.265 49.1429 14 41.5 14C33.8571 14 27.6667 20.265 27.6667 28C27.6667 35.735 33.8571 42 41.5 42ZM41.5 20.65C42.4537 20.65 43.3981 20.8401 44.2792 21.2095C45.1604 21.5789 45.961 22.1203 46.6354 22.8028C47.3098 23.4853 47.8447 24.2955 48.2097 25.1873C48.5747 26.079 48.7625 27.0348 48.7625 28C48.7625 28.9652 48.5747 29.921 48.2097 30.8127C47.8447 31.7045 47.3098 32.5147 46.6354 33.1972C45.961 33.8797 45.1604 34.4211 44.2792 34.7905C43.3981 35.1599 42.4537 35.35 41.5 35.35C39.5739 35.35 37.7266 34.5756 36.3646 33.1972C35.0027 31.8188 34.2375 29.9493 34.2375 28C34.2375 26.0507 35.0027 24.1812 36.3646 22.8028C37.7266 21.4244 39.5739 20.65 41.5 20.65Z" fill="#334155"/>
+											</svg>
+										</i>
+									</button>
+								{% endif %}
+							</div>
+
+							<div class="flex justify-center items-center h-full w-full translate-y-[.125rem] cart-header relative">
+							<salla-cart-summary show-cart-label ="false">
+							
+							 <i slot="icon">
+							<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewbox="0 0 57 59" fill="none">
+											<g id="Group">
+												<g id="Group_2">
+													<path id="Vector" d="M28.0954 22.9955H33.5981V14.7069H41.8521V9.18117H33.5981V0.892578H28.0954V9.18117H19.8414V14.7069H28.0954V22.9955ZM17.0901 47.8612C14.0636 47.8612 11.6149 50.3478 11.6149 53.387C11.6149 56.4261 14.0636 58.9127 17.0901 58.9127C20.1165 58.9127 22.5927 56.4261 22.5927 53.387C22.5927 50.3478 20.1165 47.8612 17.0901 47.8612ZM44.6034 47.8612C41.577 47.8612 39.1283 50.3478 39.1283 53.387C39.1283 56.4261 41.577 58.9127 44.6034 58.9127C47.6299 58.9127 50.1061 56.4261 50.1061 53.387C50.1061 50.3478 47.6299 47.8612 44.6034 47.8612ZM20.1165 34.0469H40.614C42.6775 34.0469 44.4934 32.9142 45.4288 31.2012L56.049 11.8335L51.2617 9.18117L40.614 28.5212H21.2996L9.5789 3.65544H0.582031V9.18117H6.08471L15.9895 30.1513L12.2752 36.8927C10.2667 40.5949 12.908 45.0984 17.0901 45.0984H50.1061V39.5727H17.0901L20.1165 34.0469Z" fill="#334155"/>
+												</g>
+											</g>
+										</svg>
+							</i>
+  						
+						</salla-cart-summary>
+							
+							<button id="cart-button-second" class=" w-full h-full absolute top-0 right-0">  
+							
+							</button>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+{% if theme.settings.get("whasapp") %}
+<a href="https://wa.me/{{theme.settings.get("whasapp")}}" class="fixed bottom-[10rem] md:bottom-5 right-5 z-50">
+		<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0 0 48 48">
+			<path fill="#fff" d="M4.868,43.303l2.694-9.835C5.9,30.59,5.026,27.324,5.027,23.979C5.032,13.514,13.548,5,24.014,5c5.079,0.002,9.845,1.979,13.43,5.566c3.584,3.588,5.558,8.356,5.556,13.428c-0.004,10.465-8.522,18.98-18.986,18.98c-0.001,0,0,0,0,0h-0.008c-3.177-0.001-6.3-0.798-9.073-2.311L4.868,43.303z"></path><path fill="#fff" d="M4.868,43.803c-0.132,0-0.26-0.052-0.355-0.148c-0.125-0.127-0.174-0.312-0.127-0.483l2.639-9.636c-1.636-2.906-2.499-6.206-2.497-9.556C4.532,13.238,13.273,4.5,24.014,4.5c5.21,0.002,10.105,2.031,13.784,5.713c3.679,3.683,5.704,8.577,5.702,13.781c-0.004,10.741-8.746,19.48-19.486,19.48c-3.189-0.001-6.344-0.788-9.144-2.277l-9.875,2.589C4.953,43.798,4.911,43.803,4.868,43.803z"></path><path fill="#cfd8dc" d="M24.014,5c5.079,0.002,9.845,1.979,13.43,5.566c3.584,3.588,5.558,8.356,5.556,13.428c-0.004,10.465-8.522,18.98-18.986,18.98h-0.008c-3.177-0.001-6.3-0.798-9.073-2.311L4.868,43.303l2.694-9.835C5.9,30.59,5.026,27.324,5.027,23.979C5.032,13.514,13.548,5,24.014,5 M24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974 M24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974C24.014,42.974,24.014,42.974,24.014,42.974 M24.014,4C24.014,4,24.014,4,24.014,4C12.998,4,4.032,12.962,4.027,23.979c-0.001,3.367,0.849,6.685,2.461,9.622l-2.585,9.439c-0.094,0.345,0.002,0.713,0.254,0.967c0.19,0.192,0.447,0.297,0.711,0.297c0.085,0,0.17-0.011,0.254-0.033l9.687-2.54c2.828,1.468,5.998,2.243,9.197,2.244c11.024,0,19.99-8.963,19.995-19.98c0.002-5.339-2.075-10.359-5.848-14.135C34.378,6.083,29.357,4.002,24.014,4L24.014,4z"></path><path fill="#40c351" d="M35.176,12.832c-2.98-2.982-6.941-4.625-11.157-4.626c-8.704,0-15.783,7.076-15.787,15.774c-0.001,2.981,0.833,5.883,2.413,8.396l0.376,0.597l-1.595,5.821l5.973-1.566l0.577,0.342c2.422,1.438,5.2,2.198,8.032,2.199h0.006c8.698,0,15.777-7.077,15.78-15.776C39.795,19.778,38.156,15.814,35.176,12.832z"></path><path fill="#fff" fill-rule="evenodd" d="M19.268,16.045c-0.355-0.79-0.729-0.806-1.068-0.82c-0.277-0.012-0.593-0.011-0.909-0.011c-0.316,0-0.83,0.119-1.265,0.594c-0.435,0.475-1.661,1.622-1.661,3.956c0,2.334,1.7,4.59,1.937,4.906c0.237,0.316,3.282,5.259,8.104,7.161c4.007,1.58,4.823,1.266,5.693,1.187c0.87-0.079,2.807-1.147,3.202-2.255c0.395-1.108,0.395-2.057,0.277-2.255c-0.119-0.198-0.435-0.316-0.909-0.554s-2.807-1.385-3.242-1.543c-0.435-0.158-0.751-0.237-1.068,0.238c-0.316,0.474-1.225,1.543-1.502,1.859c-0.277,0.317-0.554,0.357-1.028,0.119c-0.474-0.238-2.002-0.738-3.815-2.354c-1.41-1.257-2.362-2.81-2.639-3.285c-0.277-0.474-0.03-0.731,0.208-0.968c0.213-0.213,0.474-0.554,0.712-0.831c0.237-0.277,0.316-0.475,0.474-0.791c0.158-0.317,0.079-0.594-0.04-0.831C20.612,19.329,19.69,16.983,19.268,16.045z" clip-rule="evenodd"></path>
+		</svg>
+	</a>
+	
+{% endif %}
+	
+{% if theme.settings.get("scroll_top") %}
+			<button id="scrollToTopBtn" class="fixed bottom-20 md:bottom-5 left-5 z-50 w-12 h-12 hidden justify-center items-center bg-white text-black cursor-pointer rounded-full shadow-lg transition-all hover:bg-slate-300">
+			<svg
+				aria-hidden="true"
+				focusable="false"
+				data-prefix="fas"
+				width="20"
+				role="img"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 448 512"
+			>
+				<path
+					fill="currentColor"
+					d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"
+				></path>
+			</svg>
+		</button>	
+{% endif %}
+
+{# Nav Botom #}
+<div
+  class="nav-bottom fixed bottom-0 left-0 z-30 w-full h-16 rounded-t-lg bg-white block md:hidden"
+>
+  <div
+    class="flex justify-around items-center h-full w-full mx-auto font-medium"
+  >
+    <a href="{{ store.url }}">
+      <button
+        type="button"
+        class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group"
+      >
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+					<path d="M10 20.0361V14.0361H14V20.0361H19V12.0361H22L12 3.03613L2 12.0361H5V20.0361H10Z" fill="#000000"/>
+				</svg>
+        <span class="text-sm">{{ trans('navbar_bottom.links.home') }}</span>
+      </button>
+    </a>
+    <a href="#mobile-menu">
+      <button
+        type="button"
+        class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group"
+      >
+				<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
+					<path d="M3.18213 13.0361H11.1821V3.03613H3.18213V13.0361ZM3.18213 21.0361H11.1821V15.0361H3.18213V21.0361ZM13.1821 21.0361H21.1821V11.0361H13.1821V21.0361ZM13.1821 3.03613V9.03613H21.1821V3.03613H13.1821Z" fill="#212121"/>
+				</svg>
+        <span class="text-sm">{{ trans('navbar_bottom.links.categories') }}</span>
+      </button>
+    </a>
+		{% if theme.settings.get("offer_nav_bottom") %}
+			<a href="{{ theme.settings.get("url_nav_bottom") }}">
+				<button
+					type="button"
+					class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+						<path d="M12.4998 21.0361H8.57381C7.8572 21.0361 7.16429 20.7796 6.62043 20.3129C6.07658 19.8463 5.71773 19.2004 5.60881 18.4921L4.35381 10.3401C4.30997 10.0551 4.32829 9.76399 4.40751 9.48672C4.48673 9.20944 4.62497 8.95258 4.81275 8.73374C5.00054 8.51489 5.23342 8.33924 5.49545 8.21883C5.75747 8.09842 6.04244 8.0361 6.33081 8.03613H17.6698C17.9582 8.0361 18.2431 8.09842 18.5052 8.21883C18.7672 8.33924 19.0001 8.51489 19.1879 8.73374C19.3756 8.95258 19.5139 9.20944 19.5931 9.48672C19.6723 9.76399 19.6906 10.0551 19.6468 10.3401L19.2308 13.0401" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+						<path d="M9 11.0361V6.03613C9 5.24048 9.31607 4.47742 9.87868 3.91481C10.4413 3.3522 11.2044 3.03613 12 3.03613C12.7956 3.03613 13.5587 3.3522 14.1213 3.91481C14.6839 4.47742 15 5.24048 15 6.03613V11.0361M16 21.0361L21 16.0361M21 21.0361V21.0461M16 16.0361V16.0461" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+					</svg>
+					<span class="text-sm">{{ trans('navbar_bottom.links.discount') }}</span>
+				</button>
+			</a>
+		{% endif %}
+    <button id="cart-button" type="button" class="fix-h flex flex-col items-center justify-center px-5 gap-[3px] hover:bg-gray-50 group" >
+      <div class=" relative">  
+	  <salla-cart-summary show-cart-label ="false">
+							
+							 <i slot="icon">
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 57 59" fill="none">
+											<g id="Group">
+												<g id="Group_2">
+													<path id="Vector" d="M28.0954 22.9955H33.5981V14.7069H41.8521V9.18117H33.5981V0.892578H28.0954V9.18117H19.8414V14.7069H28.0954V22.9955ZM17.0901 47.8612C14.0636 47.8612 11.6149 50.3478 11.6149 53.387C11.6149 56.4261 14.0636 58.9127 17.0901 58.9127C20.1165 58.9127 22.5927 56.4261 22.5927 53.387C22.5927 50.3478 20.1165 47.8612 17.0901 47.8612ZM44.6034 47.8612C41.577 47.8612 39.1283 50.3478 39.1283 53.387C39.1283 56.4261 41.577 58.9127 44.6034 58.9127C47.6299 58.9127 50.1061 56.4261 50.1061 53.387C50.1061 50.3478 47.6299 47.8612 44.6034 47.8612ZM20.1165 34.0469H40.614C42.6775 34.0469 44.4934 32.9142 45.4288 31.2012L56.049 11.8335L51.2617 9.18117L40.614 28.5212H21.2996L9.5789 3.65544H0.582031V9.18117H6.08471L15.9895 30.1513L12.2752 36.8927C10.2667 40.5949 12.908 45.0984 17.0901 45.0984H50.1061V39.5727H17.0901L20.1165 34.0469Z" fill="#334155"/>
+												</g>
+											</g>
+										</svg>
+							</i>
+  						
+						</salla-cart-summary>
+						<div class=" absolute w-full h-full top-0 right-0">
+						</div>
+										</div>
+      <span class="text-sm">{{ trans('navbar_bottom.links.cart') }}</span>
+    </button>
+    
+  </div>
+</div>
+
+	</header>
+	{% if store.scope %}
+		<salla-scopes selection="{{ store.scope.display_as == 'popup' ? 'mandatory' : 'optional' }}"></salla-scopes>
+	{% endif %}
+
+	{% if theme.settings.get("default_nav_bar_colour") == true %}
+		{% set navbar_colour = '#334155' %}
+	{% else %}
+		{% set navbar_colour = theme.settings.get("navbar_colour") %}
+	{% endif %}
+{# Category Menu Container #}
+	<div class="flex justify-center h-13 items-start menu-style" style="background-color: {{ navbar_colour }};">
+		<div class="container">
+				<div id="category-menu" class="menu-new-design text-xl  w-full flex items-center justify-center">
+					{% component 'header.menu' with {'header': true}%}
+			</div>
+		</div>
+	</div>
+{# End Of Category Menu Container #}

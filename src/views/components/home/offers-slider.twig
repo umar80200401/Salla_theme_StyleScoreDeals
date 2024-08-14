@@ -1,0 +1,19 @@
+<section class="s-block px-4">
+	<salla-slider show-controls="false" >
+    <div slot="items">
+			{% for slide in component.offer_slider %}
+				<div class="flex flex-col items-center justify-center space-y-4 offer-style border ml-2 pb-3  !px-0">
+					<div class="w-full img-box">
+						<img src="{{slide.image}}" class="w-full h-full"/>
+					</div>
+					<h2 class="shamelBold " style="font-weight:  800">
+						{{slide.title}}
+					</h2>
+					<a href="{{slide.url}}" class="text-white btn shamelBold" style="width:40%; font-size:20px; font-weight: 600; color: #fff;">
+						{{slide.button}}
+					</a>
+				</div>
+			{% endfor %}
+		</div>
+	</salla-slider>
+</section>

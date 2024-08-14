@@ -1,0 +1,21 @@
+<section class ="s-block">
+    <div class="container flex md:gap-10 gap-4  flex-col justify-center items-center store-features">
+			<h1  class="shamelBold md:text-[64px] leading-12  text-[40px]" > {{component.title}}</h1>
+			<p class="shamelBook md:text-[54px] leading-12  text-center  text-[30px] opacity-90">{{component.subtitle}}</p>
+			<div class="grid-feattures">
+				{% for link in component.card_store %}
+					<div class="card-store-features flex flex-col justify-center items-center gap-4" style="background-color : {{link.background_color}}">
+							<div class=" w-[110px] h-[120px] flex justify-center items-center rounded-full">
+									<img src="{{link.image}}" class=" object-cover" />
+							</div>
+							<div class="flex flex-col text-center md:gap-2 gap-1">
+							<h2 class=" shamelBold text-[36px]">{{ link.title_card }}</h2>
+							<p class="shamelBook text-[24px]">{{ link.subtitle_card }}</p>
+							</div>
+					</div>
+					
+				{% endfor %}
+			</div>
+		</div>
+        
+</section>

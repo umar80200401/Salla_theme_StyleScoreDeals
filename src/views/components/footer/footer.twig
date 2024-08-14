@@ -1,0 +1,164 @@
+
+
+{% if theme.settings.get("default_add_to_cart_colours") == false %}
+  <style>
+    .store-footer #mc-embedded-subscribe-form button
+    {
+      background-color: {{ theme.settings.get("add_to_cart_button_colour") }} !important;
+    }
+  </style>
+{% else %}
+  <style>
+    .store-footer #mc-embedded-subscribe-form button
+    {
+      background-color: #404553;
+    }
+  </style>
+{% endif %}
+
+{% if theme.settings.get("default_text_colour") == false %}
+  <style>
+    .store-footer #mc-embedded-subscribe-form button
+    {
+      color: {{ theme.settings.get("custom_text_colour") }};
+    }
+  </style>
+{% else %}
+  <style>
+    .store-footer #mc-embedded-subscribe-form button
+    {
+      color: #ffffff;
+    }
+  </style>
+{% endif %}
+
+{% if theme.settings.get("default_footer_colours") == true %}
+  {% set footer_bg_colour = '#505256' %}
+  {% set footer_colour = '#FFFFFF' %}
+{% else %}
+  {% set footer_bg_colour = theme.settings.get("footer_bg_colour") %}
+  {% set footer_colour = theme.settings.get("footer_text_colour") %}
+{% endif %}
+
+<footer class="store-footer shamelMid">
+
+  {% if theme.settings.get("switch_mail") %}
+  <div class="container w-full  mb-8 relative">
+
+      <div
+      class="flex flex-col lg:flex-row justify-between items-center gap-6 py-8 px-6 bg-[#505256] rounded-xl text-white"
+      style="background-color: {{ footer_bg_colour }}; color: {{ footer_colour }};"
+    >
+
+
+      <p class="text-xl shamelMid">
+       {{ theme.settings.get("mailchimp_text") }}
+      
+       
+      </p>
+
+<form action="{{ theme.settings.get("mailchimp") }}" class="flex flex-col lg:flex-row justify-center items-center gap-4" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" novalidate="novalidate" class="mt-3 sm:mt-0 validate flex items-center gap-2">
+<svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              viewBox="0 0 45 45"
+              fill="none"
+            >
+              <path
+                d="M37.5 15L22.5 24.375L7.5 15V11.25L22.5 20.625L37.5 11.25M37.5 7.5H7.5C5.41875 7.5 3.75 9.16875 3.75 11.25V33.75C3.75 34.7446 4.14509 35.6984 4.84835 36.4016C5.55161 37.1049 6.50544 37.5 7.5 37.5H37.5C38.4946 37.5 39.4484 37.1049 40.1516 36.4016C40.8549 35.6984 41.25 34.7446 41.25 33.75V11.25C41.25 10.2554 40.8549 9.30161 40.1516 8.59835C39.4484 7.89509 38.4946 7.5 37.5 7.5Z"
+                fill="white"
+              />
+            </svg>
+<div class="min-w-0 flex-1">
+<label for="cta-email" class="sr-only">{{trans("footer.new_letters.email")}} </label>
+<input id="cta-email" name="EMAIL" type="email" class="text-white shamelBook bg-[#EAE2E299] py-2 placeholder:text-white px-4 font-sans" placeholder="{{trans("footer.new_letters.email")}}">
+</div>
+<div class="ltr:sm:ml-3 rtl:sm:mr-3">
+<button type="submit" class="py-2 px-4 shamelBook">
+ {{trans("footer.new_letters.subscribe")}}
+</button>
+</div>
+</form>
+</div>
+<div id="mce-responses" class="clear foot text-center">
+<div class="response text-red-400 mt-2 text-sm" id="mce-error-response" style="display:none"></div>
+<div class="response text-green-500 mt-2 text-sm" id="mce-success-response" style="display:none"></div>
+</div>
+<script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
+    </div>
+
+  {% endif %}
+
+
+  {#<div aria-label="footer" class="store-footer__inner !border-none" style="background-color: {{ footer_bg_colour }}; color: {{ footer_colour }};">#}
+  <div aria-label="footer" class="store-footer__inner !border-none" style="background-color:{{theme.settings.get("footer_bg_colour")}}">
+  <div class="container px-8">
+    <div class="grid grid-col-1 lg:grid-cols-3 gap-8 lg:gap-6">
+        <div class=" rtl:lg:pl-20 ltr:lg:pr-20">
+          <a href="{{ link('/') }}" class="flex items-center m-0">
+            <h3 class="shamelBold">{{store.name}}</h3>
+          </a>
+          {% if store.description %}
+            <p class="max-w-sm leading-6 mb-6">
+              {{ store.description|raw }}
+            </p>
+          {% endif %}
+          {# custom vat #}
+            
+            
+         
+          {# vat #}
+          {% if store.settings.tax.number %}
+            <div class="flex rtl:space-x-reverse space-x-2 items-end">
+              {% if store.settings.tax.certificate %}
+                <a class="load-img-onclick" data-modal-id="modal-value-tax" href="#/" alt="{{ store.settings.tax.number }}">
+                  <img width="100%" height="100%" src="{{ 'images/s-empty.png' | cdn }}" data-src="{{'images/tax.png' | cdn(70,70)}}" class="lazy w-10 rounded-sm hover:opacity-80 transition-opacity" alt="value added tax">
+                </a>
+              {% endif %}
+              <div>
+                <p class="text-sm text-text-grey mb-1">{{ trans('common.elements.tax_number') }}</p>
+                <b class="text-sm">{{ store.settings.tax.number }}</b>
+              </div>
+            </div>
+
+            {% if store.settings.tax.certificate %}
+              <salla-modal sub-title-first sub-title="{{ trans('common.elements.tax_number') }}" modal-title="{{ store.settings.tax.number }}" id="modal-value-tax">
+                <div class="flex justify-center max-w-full">
+                  <img class="w-full" loading="lazy" 
+                  src="{{ 'images/s-empty.png' | asset }}" 
+                  data-src="{{ store.settings.tax.certificate }}" 
+                  alt="{{ store.settings.tax.number }}"/>
+                </div>
+              </salla-modal>
+            {% endif %}
+          {% endif %}
+        </div>
+
+        {% component 'footer.menu' %}
+
+        {% component 'footer.mobile-apps' %}
+    </div>
+    {% component 'footer.contacts' %}
+
+    <div class="lg:block">
+        {% component 'footer.social' %}
+
+    </div>
+  </div>
+  </div>
+<style>
+    .footer_bottom_bar p {
+        color: {{theme.settings.get("footer_text_colour")}} !important;
+    }
+</style>
+  <div class="py-8" style="background-color:{{theme.settings.get("footer_bg_colour")}};">
+    <div class="container">
+      <div class="flex flex-col lg:flex-row justify-between items-center">
+        <span class="text-xl text-white mb-4 lg:mb-0 shamelBold  footer_bottom_bar">{% hook copyright %}</span>
+        {% component 'footer.payment-methods' %}
+        <span class="hidden bottom-2 rtl:pl-24 ltr:pr-24 md:grid-cols-3"></span>
+      </div>
+    </div>
+  </div>
+</footer>

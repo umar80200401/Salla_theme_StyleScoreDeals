@@ -1,0 +1,55 @@
+{#
+| Variable              | Type                  | Description                                                                  |
+|-----------------------|-----------------------|------------------------------------------------------------------------------|
+| component             | object                | Contains merchant settings for fields from twilight.json `component` section |
+| component.background  | string                |                                                                              |
+| component.title       | ?string               |                                                                              |
+| component.description | ?string               |                                                                              |
+| component.products    | Product[] *Collection | @see views/pages/product.twig                                                |
+| position              | int                   | Sorting number start from zero                                               |
+#}
+<style>
+p.sports_design_p::after{
+	background-color:#231f1e !important;
+}
+</style>
+<section class="s-block s-block--slider-with-bg !bg-white s-block--full-bg  component-header-category">
+	<div class="slider-bg relative">
+		<img class="sm:w-full sm:h-[95%] sm:object-cover sm:object-posiiton-center" src="{{ component.background_image }}" />
+		<div class="container pt-2 xs:pt-10 sm:pt-20 flex flex-col items-center absolute top-0">
+			<div id="sports_design" class="flex flex-col justify-center items-center gap-4 sm:gap-8">
+				<h3 class="font-bold leading-12 text-center shamelBold text-[30px] sm:text-[35px] md:text-[64px]">
+					{{ component.title }}
+				</h3>
+				<p class="sports_design_p text-[25px] sm:text-[30px] md:text-[40px] mb-8  shamelBold max-w-lg text-center mx-auto w-fit font-bold pb-2 tracking-wider relative after:absolute after:-bottom-4 after:left-0 after:w-full  after:h-[6px] after:bg-white">
+					{{ component.description }}
+				</p>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="container flex justify-center items-center relative">
+
+		<div class="flex md:flex-row flex-col  items-center cat-with-head">
+			{% for link in component.header_category %}
+				<div class=" relative">
+
+					<a aria-label="link" class="api-set-category relative" href="{{link.url}}">
+						<div class="itme-categories-image card-effect category-edit rounded h-[300px]">
+							<img src="{{link.image}}" alt="cateogry-photo" class="relative  h-[300px]">
+							<p class="category-name absolute p-header-category text-black shamelBold text-[24px]">{{link.name}}</p>
+						</div>
+
+
+					</a>
+
+				</div>
+
+			{% endfor %}
+
+		</div>
+
+
+	</div>
+</section>

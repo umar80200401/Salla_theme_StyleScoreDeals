@@ -1,0 +1,38 @@
+{#
+| Variable                       | Type     | Description                                                                  |
+|--------------------------------|----------|------------------------------------------------------------------------------|
+| component                      | object   | Contains merchant settings for fields from twilight.json `component` section |
+| component.slides[].image       | string   | Image url                                                                    |
+| component.slides[].title       | ?string  |                                                                              |
+| component.slides[].description | ?string  |                                                                              |
+| component.slides               | object[] | list of slides                                                               |
+| position                       | int      | Sorting number start from zero                                               |
+#}
+
+<section class="s-block head-edit {{ component.overlay ? "s-block--hero-slider" : "s-block--hero-slider over" }} s-block--full-bg wide-placeholder home-slider {{ component.is_container ? "container" : " "}} ">
+	<salla-slider id="main-slider-{{ position }}" class="home-slider main-slider {{ component.is_rounded ? "rounded" : " "}} overflow-hidden" show-controls="false" auto-play loop >
+		<div slot="items">
+			{% for slide in component.hero_slider %}
+				<div class="swiper-lazy-wrap w-full">
+					<img class="w-full" src="{{ slide.image }}" />
+					<!-- <div data-background="{{ slide.image }}"  class="swiper-lazy max-h-[500px] object-cover" ></div> -->
+                    <div class="container relative flex flex-col justify-center items-center w-full h-full px-3 md:px-10  home-slider__content"  >
+						<div class="absolute bottom-[2rem] md:bottom-[4rem] flex flex-col w-full" style="justify-content : {{slide.content_direction|json_encode()|split('"')[1] }}; text-align : {{slide.content_direction|json_encode()|split('"')[1] }};">
+							<h3  class="shamelBold  md:!text-[64px]  font-bold  leading-0 sm:leading-16 md:leading-tight text-white mb-0 md:mb-7 ">{{ slide.title }}</h3>
+							<p  class="mb-4 shamelBook  md:text-[50px] text-gray-100  description">{{ slide.subtitle }}</p>
+
+							{% if slide.button %}
+								<button class=" container  w-full flex md:mt-[12rem]" style="justify-content : {{slide.button_direction|json_encode()|split('"')[1] }};">
+									<a href="{{slide.url}}" class="flex justify-center items-center md:py-4 py-2 md:px-8 px-6 shamelBold md:text-[32px] text-[24px]" style="border-radius: 50px;background-color: {{slide.background_color_button}}; color: {{slide.text_color_button}};">
+										{{slide.button}}
+									</a>
+								</button>
+							{% endif %}
+					</div>
+					
+				</div>
+					
+		</div>
+	{% endfor %}
+</div></salla-slider></section>
+

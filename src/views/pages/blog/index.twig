@@ -1,0 +1,196 @@
+{#
+| Variable                | Type          | Description                 |
+|-------------------------|---------------|-----------------------------|
+| page                    | object        |                             |
+| page.title              | string        |                             |
+| page.slug               | string        |                             |
+| slides                  | ?Article[]    | @see pages/blog/single.twig |
+| articles                | Article[]     |                             |
+| categories              | BlogCategory[]|                             |
+| category.is_current     | bool          |                             |
+| category.name           | string        |                             |
+| category.url            | string        |                             |
+#}
+{% extends "layouts.master" %}
+
+{% block content %}
+    <div class="container mb-8 sm:mb-24">
+        <div class="relative">
+            <div class="absolute z-20 blog">
+                {% component 'footer.menu' %}
+            </div>
+            {% if theme.settings.get("blog_img_main") %}
+                <div class="relative">
+                    <div class="absolute h-full w-full  top-0 left-0 bg-black opacity-25"></div>
+                    <img src="{{theme.settings.get("blog_img_main")}}" class=" max-h-[520px] mb-10 w-full object-cover rounded-md"/>
+                </div>
+            {% endif %}
+        </div>
+    <div class="center-between">
+
+        {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
+        <nav class="breadcrumbs w-full py-5">
+             <salla-breadcrumb></salla-breadcrumb>
+            <div class="flex justify-start items-center gap-4 mt-6">
+                <h2 class="font-bold">{{ trans('pages.blog_categories.categories') }}</h2>
+                <ul>
+                    {% for category in categories %}
+                        <li {{ category.is_current ? ' class="text-primary "' : '' }}>
+                            <a class="block font-bold text-xl hover:text-primary" href="{{ category.url }}">
+                                ({{ category.name }})
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </nav>
+
+        {# Categories filter dropdown #}
+        <div class="dropdown-toggler cat-filter lg:hidden">
+          <button aria-label="Categories Trigger" type="button" class="dropdown__trigger rtl:space-x-reverse space-x-1.5 flex text-sm text-primary" aria-expanded="true" aria-haspopup="true"> 
+            <i class="sicon-filter text-xs pointer-events-none"></i>
+            <span class="fix-align pointer-events-none">{{ trans('pages.blog_categories.categories') }}</span>
+          </button>
+          <div class="dropdown__menu"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="menu-button"
+              tabindex="-1">
+              <div class="flex items-center p-4 border-b mb-1 lg:hidden relative">
+                  <h2 class="font-bold">{{ trans('pages.blog_categories.categories') }}</h2>
+                  <button class="dropdown__close h-12 w-12 text-red-500 text-lg rounded-full absolute top-2 rtl:left-1 ltr:right-1 z-50">
+                      <i class="sicon-cancel pointer-events-none"></i>
+                  </button>
+              </div>
+              <ul class="pb-4 lg:pb-2 py-2 px-2 lg:px-0 space-y-px">
+                {% for category in categories %}
+                    <li>
+                        <a class="p-2.5 block text-sm hover:text-primary {{ category.is_current ? ' is-active' : '' }}" href="{{ category.url }}">
+                            <span class="rtl:ml-auto ltr:mr-auto">{{ category.name }}</span>
+                        </a>
+                    </li>
+                  {% endfor %}
+              </ul>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-8">
+           
+
+            <div class="main-content lg:col-span-6">
+                {% if slides|length %}
+                    <salla-slider 
+                      id="blog-home-slider"
+                      type="blog" 
+                      auto-play 
+                      auto-height
+                      show-controls="false" 
+                      pagination
+                      class="blog-slider block rounded overflow-hidden mb-2.5 lg:mb-8">
+                        <div slot="items">
+                            {% for article in slides %} {# has-overlay #}
+                                <div class="swiper-slide blog-slider__slide h-[300px] md:h-[400px] relative bg-border-color flex justify-center {{ article.has_image ? '' : 'no-thumb' }}">
+                                <a href=" {{article.url}}" class=" w-full h-full">
+                                
+                                    <img class="{{ article.image.url|is_placeholder?'sm:h-full w-20 object-contain opacity-50':'object-cover h-full w-full' }}"
+                                         src="{{ article.image.url }}" alt="{{ article.image.alt }}">
+                                    <div class="absolute z-10 top-44 rtl:right-0 ltr:left-0 p-4 pb-10 rtl:lg:pr-10 ltr:lg:pl-10 lg:pb-20">
+                                        <div class="blog-slider__content relative">
+                                            <div class="z-20 w-full md:w-5/6 lg:w-6/12">
+                                                <div data-swiper-parallax="-500"  class="block-slide-anime">
+                                                    <div class="mb-2.5 rounded-md inline-flex text-xl rtl:space-x-reverse space-x-5">
+                                                        <div class="flex items-center">
+                                                            <svg class="rtl:ml-1 ltr:mr-1" xmlns="http://www.w3.org/2000/svg" width="40" height="35" viewBox="0 0 70 66" fill="none">
+                                                                <path d="M58.1133 8.903H55.2383V3.48633H49.4883V8.903H20.7383V3.48633H14.9883V8.903H12.1133C8.95078 8.903 6.36328 11.3405 6.36328 14.3197V57.653C6.36328 60.6322 8.95078 63.0697 12.1133 63.0697H58.1133C61.2758 63.0697 63.8633 60.6322 63.8633 57.653V14.3197C63.8633 11.3405 61.2758 8.903 58.1133 8.903ZM58.1133 57.653H12.1133V27.8613H58.1133V57.653ZM58.1133 22.4447H12.1133V14.3197H58.1133V22.4447Z" fill="#212121"/>
+                                                            </svg>
+                                                            <span class="whitespace-nowrap font-bold">{{ article.created_at|date }}</span>
+                                                        </div>
+                                                        <a href="{{ article.author.url }}"
+                                                           class=" flex items-center hover:underline">
+                                                            <svg class="rtl:ml-1 ltr:mr-1" xmlns="http://www.w3.org/2000/svg" width="50" height="45" viewBox="0 0 88 84" fill="none">
+                                                                <path d="M43.9102 14.8853C44.9098 14.8853 45.8997 15.0731 46.8233 15.4381C47.7469 15.8031 48.5861 16.338 49.293 17.0124C49.9999 17.6868 50.5606 18.4874 50.9432 19.3685C51.3258 20.2497 51.5227 21.1941 51.5227 22.1478C51.5227 23.1015 51.3258 24.0459 50.9432 24.927C50.5606 25.8082 49.9999 26.6088 49.293 27.2831C48.5861 27.9575 47.7469 28.4925 46.8233 28.8575C45.8997 29.2224 44.9098 29.4103 43.9102 29.4103C41.8912 29.4103 39.9549 28.6451 38.5273 27.2831C37.0997 25.9212 36.2977 24.0739 36.2977 22.1478C36.2977 20.2217 37.0997 18.3744 38.5273 17.0124C39.9549 15.6504 41.8912 14.8853 43.9102 14.8853ZM43.9102 46.0103C54.6764 46.0103 66.0227 51.0594 66.0227 53.2728V57.077H21.7977V53.2728C21.7977 51.0594 33.1439 46.0103 43.9102 46.0103ZM43.9102 8.31445C35.8989 8.31445 29.4102 14.5049 29.4102 22.1478C29.4102 29.7907 35.8989 35.9811 43.9102 35.9811C51.9214 35.9811 58.4102 29.7907 58.4102 22.1478C58.4102 14.5049 51.9214 8.31445 43.9102 8.31445ZM43.9102 39.4394C34.2314 39.4394 14.9102 44.0736 14.9102 53.2728V63.6478H72.9102V53.2728C72.9102 44.0736 53.5889 39.4394 43.9102 39.4394Z" fill="#212121"/>
+                                                            </svg>
+                                                            <span class="whitespace-nowrap font-bold">{{ article.author.name }}</span>
+                                                        </a>
+                                                    </div>
+                                                    <h3 class="text-sm font-bold leading-normal mb-4">
+                                                        <a href="{{ article.url }}">{{ article.title }}</a>
+                                                    </h3>
+                                                </div>
+                                                <p data-swiper-parallax="-300" class="line-clamp-2 block-slide-anime description text-xl">{{ article.summary }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </salla-slider>
+                {% else %}
+                    <div class="sr-only lg:not-sr-only">
+                        <h1 class="blog-category__title font-bold text-lg mb-8">{{ page.title }}</h1>
+                    </div>
+                {% endif %}
+                {% if articles|length %}
+                    {% hook 'blog:index.items.start' %}
+
+                    <salla-infinite-scroll class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 md:gap-8" next-page="{{ articles.next_page }}" autoload>
+                        {% for article in articles %}
+                            <div class='list-block post-entry relative h-full transition-shadow duration-500 hover:shadow-default rounded-lg justify-around overflow-hidden flex flex-col p-4 pb-2 bg-[#D9D9D9]'>
+                                <a href="{{ article.url }}"
+                                   class='post-entry__image relative overflow-hidden hover:opacity-90 w-full h-56 bg-border-color flex items-center justify-center'>
+                                    <img class="{{ article.image.url|is_placeholder?'sm:h-full w-20 object-contain opacity-60':'h-full w-full object-cover' }}"
+                                         src="{{ article.image.url }}"
+                                         alt="{{ article.image.alt }}">
+                                </a>
+
+                                <div class="flex-1 px-5 pt-5 pb-0">
+                                    <div class="mb-2.5 text-gray-500 rounded-md inline-flex text-sm rtl:space-x-reverse space-x-5">
+                                        <div class="flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="25" viewBox="0 0 70 65" fill="none" class="text-black md:w-9 w-7">
+                                                <path d="M57.918 8.12565H55.043V2.70898H49.293V8.12565H20.543V2.70898H14.793V8.12565H11.918C8.75547 8.12565 6.16797 10.5632 6.16797 13.5423V56.8757C6.16797 59.8548 8.75547 62.2923 11.918 62.2923H57.918C61.0805 62.2923 63.668 59.8548 63.668 56.8757V13.5423C63.668 10.5632 61.0805 8.12565 57.918 8.12565ZM57.918 56.8757H11.918V27.084H57.918V56.8757ZM57.918 21.6673H11.918V13.5423H57.918V21.6673Z" fill="#212121"/>
+                                            </svg>
+                                            <span class="md:text-[1rem] text-sm font-black text-black">{{ article.created_at|date }}</span>
+                                        </div>
+                                        <a href="{{ article.author.url }}" class="flex items-center hover:text-dark">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="35" viewBox="0 0 88 83" fill="none" class="text-black md:w-10 w-8">
+                                                <path d="M43.7148 14.1079C44.7145 14.1079 45.7044 14.2958 46.628 14.6608C47.5516 15.0257 48.3908 15.5607 49.0977 16.2351C49.8046 16.9095 50.3653 17.7101 50.7479 18.5912C51.1304 19.4723 51.3273 20.4167 51.3273 21.3704C51.3273 22.3242 51.1304 23.2686 50.7479 24.1497C50.3653 25.0308 49.8046 25.8314 49.0977 26.5058C48.3908 27.1802 47.5516 27.7151 46.628 28.0801C45.7044 28.4451 44.7145 28.6329 43.7148 28.6329C41.6959 28.6329 39.7596 27.8678 38.332 26.5058C36.9044 25.1438 36.1023 23.2966 36.1023 21.3704C36.1023 19.4443 36.9044 17.5971 38.332 16.2351C39.7596 14.8731 41.6959 14.1079 43.7148 14.1079ZM43.7148 45.2329C54.4811 45.2329 65.8273 50.2821 65.8273 52.4954V56.2996H21.6023V52.4954C21.6023 50.2821 32.9486 45.2329 43.7148 45.2329ZM43.7148 7.53711C35.7036 7.53711 29.2148 13.7275 29.2148 21.3704C29.2148 29.0134 35.7036 35.2038 43.7148 35.2038C51.7261 35.2038 58.2148 29.0134 58.2148 21.3704C58.2148 13.7275 51.7261 7.53711 43.7148 7.53711ZM43.7148 38.6621C34.0361 38.6621 14.7148 43.2963 14.7148 52.4954V62.8704H72.7148V52.4954C72.7148 43.2963 53.3936 38.6621 43.7148 38.6621Z" fill="#212121"/>
+                                            </svg>
+                                            <span class="md:text-[1rem] text-sm font-black text-black">{{ article.author.name }}</span>
+                                        </a>
+                                    </div>
+
+                                    <h3 class="post-entry__title text-lg font-normal leading-6">
+                                        <a href="{{ article.url }}">{{ article.title }}</a>
+                                    </h3>
+                                 
+                                </div>
+
+                                {% if article.tags|length %}
+                                    <div class="px-4 py-0 flex flex-wrap items-center">
+                                        {% for tag in article.tags %}
+                                            <a href="{{ tag.url }}"
+                                               class="py-2 px-4 rounded-large inline-flex items-center text-gray-500 hover:text-dark justify-center text-sm">
+                                                <i class="font-medium sicon-tag rtl:ml-1.5 ltr:mr-1.5 text-xl"></i>
+                                                <span class="fix-align whitespace-nowrap md:text-[1rem]  text-md font-extrabold text-black">{{ tag.name }}</span>
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </salla-infinite-scroll>
+
+                    {% hook 'blog:index.items.end' %}
+                {% elseif not slides|length %}
+                    <div class="no-content-placeholder">
+                        <i class="sicon-inbox icon"></i>
+                        <p>{{ trans('pages.blog_categories.no_articles') }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+
+<section class="s-block s-block--fixed-banner s-block--double-banner wide-placeholder double-banner double-banner--5 !mt-3">
+	<div class="container">
+		<div class="grid grid-cols-2 gap-1 lg:gap-16 max-h-[620px]">
+			{% for card in component.add_two_card %}
+
+				<a href="{{card.url}}" class="relative block h-full basis-3/6" >
+					<img class="w-full h-full" src="{{card.image}}" data-src="https://cdn.salla.sa/form-builder/ZjHsdgzca46oJqIwV4vTDK60zkL9OZrz9wHZnWcz.png" loading="lazy" data-ll-status="loaded">
+					<div class="absolute flex items-center w-full px-3 bottom-3" style="justify-content : {{card.button_posistion|json_encode()|split('"')[1]}}">
+						<button style="color:{{card.text_color_button}} !important;background-color:{{card.background_button_color}} !important;" class="two_cols_btn w-1/2 text-sm py-2 font-bold text-center shamelBold rounded-lg lg:w-5/12 lg:text-xl ">{{card.button}}</button>
+					</div>
+				</a>
+			{% endfor %}
+		</div>
+	</div>
+</section>
+

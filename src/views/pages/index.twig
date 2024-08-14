@@ -1,0 +1,106 @@
+{#
+| Variable         | Type       | Description                                                         |
+|------------------|------------|---------------------------------------------------------------------|
+| page             | object     |                                                                     |
+| page.title       | string     | *could be html                                                      |
+| page.slug        | string     | ex: "cat.show"                                                      |
+#}
+{% extends "layouts.master" %}
+{% block content %}
+
+    {% if theme.settings.get("default_text_colour") == false %}
+
+        <style>
+            #elan-bannle p, #elan-bannle a, .s-block h1, .s-block h2, .s-block h3, .s-block h4, .s-block p, .s-block a,  .s-block button, .s-block .s-products-slider-card .s-button-text, .s-block .swiper .s-button-text, .s-block .product-entry .s-button-text, .s-button-text
+            {
+                color: {{ theme.settings.get("custom_text_colour") }} !important;
+            }
+        </style>
+    {% else %}
+        <style>
+            #elan-bannle p, #elan-bannle a, .s-block h1, .s-block h2, .s-block h3, .s-block h4, .s-block p, .s-block a:not(.home-slider .s-block a):not(.s-block .new-design-product a), .s-block .s-products-slider-card .s-button-text,  .s-button-text:not(.tab-trigger .s-button-text):not(.s-block .product-entry .s-button-text):not(.s-block .swiper .s-button-text):not(.s-block .s-button-text):not(#productModal .s-button-text):not(#cart-submit .s-button-text)
+            {
+                color: #231f1e;
+            }
+        </style>
+
+    {% endif %}
+
+    {% if theme.settings.get("default_add_to_cart_colours") == false %}
+
+         <style>
+            salla-add-product-button:not(.addToCart__btn) .s-button-text
+            {
+                background-color: {{ theme.settings.get("add_to_cart_button_colour") }};
+                color: {{ theme.settings.get("add_to_cart_text_colour") }};
+            }
+
+            .w-full.rounded-md.bg-\[\#334155\].flex.items-center.justify-center.shamelBook.font-bold.text-\[32px\]
+            {
+                background-color: {{ theme.settings.get("add_to_cart_button_colour") }};
+            }
+
+            .s-slider-container a.text-white.btn.shamelBold
+            {
+                background-color: {{ theme.settings.get("add_to_cart_button_colour") }};
+            }
+
+            .s-block.s-block--fixed-banner.s-block--double-banner button.w-1\/2.text-sm.py-2.font-bold.text-center.shamelBold.rounded-lg.lg\:w-5\/12.lg\:text-xl 
+            {
+                background-color: {{ theme.settings.get("add_to_cart_button_colour") }};
+                color: {{ theme.settings.get("add_to_cart_text_colour") }};
+            }
+
+            .addToCart.my-3.w-full.rounded-md.flex.items-center.justify-center
+            {
+                background-color: {{ theme.settings.get("add_to_cart_button_colour") }};
+            }
+
+            .s-block--features-products.two-cols .w-full.rounded-md.py-1.mb-2.bg-\[\#334155\].flex.items-center.justify-center
+            {
+                background-color: {{ theme.settings.get("add_to_cart_button_colour") }} !important;
+            }
+
+            .s-block--special-products.category-three .w-full.rounded-md.bg-\[\#334155\].flex.items-center.justify-center
+            {
+                background-color: {{ theme.settings.get("add_to_cart_button_colour") }} !important;
+            }
+
+            .s-block--special-products.category-three .product-entry__content.justify-center.items-center.gap-2 + div
+            {
+                background-color: {{ theme.settings.get("add_to_cart_button_colour") }} !important;
+            }
+        </style>
+
+    {% else %}
+        <style>
+            salla-add-product-button .s-button-text:not(.new-design-product .s-button-text):not(.category-three .s-button-text)
+            {
+                background-color: #334155;
+                color: #fff;
+            }
+
+            .s-block.s-block--fixed-banner.s-block--double-banner button.w-1\/2.text-sm.py-2.font-bold.text-center.shamelBold.rounded-lg.lg\:w-5\/12.lg\:text-xl 
+            {
+                background-color: #334155;
+                color: #fff;
+            }
+
+            .s-slider-container a.text-white.btn.shamelBold
+            {
+                background-color: #334155;
+            }
+
+            .addToCart.my-3.w-full.rounded-md.flex.items-center.justify-center
+            {
+                background-color: #334155;
+            }
+        </style>
+
+    {% endif %}
+
+    {% component home %}
+{% endblock %}
+{% block scripts %}
+    <script defer src="{{ 'home.js' | asset }}"></script>
+{% endblock %}

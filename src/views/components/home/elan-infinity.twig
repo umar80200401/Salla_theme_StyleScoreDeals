@@ -1,0 +1,52 @@
+<div class="mx-auto max-w-7xl lg:w-full  lg:max-w-none" id="elan-bannle">
+	<article class="elan">
+		<div class="relative flex py-2 s-block--animated-brands--marquee" style="background-color :{{component.elan_background_color}} ">
+			<div id="remove-elan" style="cursor:pointer;width: 20px; height: 20px;padding: 0;display:flex;justify-content:center;align-items: center;position: absolute;top:13px; right: 15px; z-index:10;">
+            <img src="{{ 'images/Close.png' | asset }}" class="lazy" loading="lazy"/>
+				
+			</div>
+			<div class="flex s-block--animated-brands--marquee md:w-[95%] w-[89%]" >
+				<div class=" marquee__group">
+                {% for i in 1..9 %}
+                          <li style="animation-duration: 10000ms;"   class=" flex items-center justify-center gap-2">
+					{% if component.image_after_text %}
+					<img  src="{{component.image_after_text}}"  class=" w-4  h-4" />
+						
+					{% endif %}
+						<a href="{{component.elan_link}}" style="color: {{component.elan_text_color}}">
+
+							{{component.elan_title}}
+						</a>
+						{% if component.image_before_text %}
+					<img  src="{{component.image_before_text}}" class=" w-4  h-4"/>
+						
+					{% endif %}
+					</li>      
+                {% endfor %}
+					
+				
+
+				</div>
+				<div aria-hidden="true" class="marquee__group">
+					{% for i in 1..9 %}
+                          <li style="animation-duration: 10000ms;"   class=" flex items-center justify-center gap-2">
+					{% if component.image_after_text %}
+					<img  src="{{component.image_after_text}}"  class=" w-4  h-4" />
+						
+					{% endif %}
+						<a href="{{component.elan_link}}" style="color: {{component.elan_text_color}}">
+
+							{{component.elan_title}}
+						</a>
+						{% if component.image_before_text %}
+					<img  src="{{component.image_before_text}}" class=" w-4  h-4"/>
+						
+					{% endif %}
+					</li>      
+                {% endfor %}
+
+				</div>
+			</div>
+		</div>
+	</article>
+</div>

@@ -1,0 +1,11 @@
+{# {% set important_links = theme.settings.get('font_setting') %} #}
+<section class="s-block s-block--fixed-banner s-block--double-banner wide-placeholder double-banner double-banner--5">
+	<div class="{{ component.is_container ? "container" : " "}}">
+		<div class="max-h-100">
+			<a href="{{component.url}}" class="object-contain w-full h-full lg:object-cover" >
+				<img class="w-full h-full" src="{{component.image}}"  loading="lazy" data-ll-status="loaded">
+			</a>
+		</div>
+		<div>{{theme.settings.get('font_setting')}}</div>
+	</div>
+</section>

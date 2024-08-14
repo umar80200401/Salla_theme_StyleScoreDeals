@@ -1,0 +1,53 @@
+<style>
+
+.swiper{
+    width:100% !important;
+}
+.category_slider .swiper-wrapper{
+    width:20% !important;
+}
+
+@media (max-width:640px){
+   .category_slider  .swiper-wrapper{
+        width:40% !important;
+        margin:10px !impotant;
+    }
+}
+a#slider_atag {
+    text-align: center !important;
+}
+</style>
+<section id="categories-{{ position }}-slider" class="category_slider s-block s-block--category-sldier container overflow-hidden">
+     {% for ct in component.catsslider %}
+   
+    <div class="container text-center my-3">
+   
+        <h2 class="shamelBold md:text-[58px] leading-12  text-[40px]">{{ct.title}}</h2><br>
+        <p class="shamelBold md:!text-[24px]">{{ct.subtitle}}</p>
+    
+    </div>
+    
+    {% endfor %}
+    <br><div class="m-auto line"></div>
+    <salla-slider type="carousel" auto-play show-controls="false" class="p-3">
+       
+        {% for item in component.cats %}
+            <div slot="items">
+        
+                <div class="swiper-slide">
+                <a id="slider_atag" class="flex flex-col justify-center items-center" href="{{link('redirect/categories/'~item.categories[0])}}">
+                    <div class="w-22 h-22 md:h-40 md:w-40 lg:w-40 lg:h-40">
+                        <img class="rounded-full aspect-[1/1] object-cover" src="{{item.image}}">
+                    </div>
+                    <h4 class="category-name shamelBold md:!text-[24px]">
+						{{item.title}}
+				    </h4>
+                </a>
+                </div>
+                
+            </div>
+        
+        {% endfor %}    
+       
+    </salla-slider>
+</section>

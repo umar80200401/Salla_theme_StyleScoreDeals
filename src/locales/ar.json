@@ -1,0 +1,72 @@
+{
+  "blocks": {
+    "header": {
+      "cart": "السلة"
+    },
+    "appBanner": {
+      "download_now": "حمله الان"
+    }
+  },
+  "common": {
+    "bank_offer_sub_title_multiple": "ادفع قيمة مشترياتك عبر أحد البطاقات البنكة التالية واحصل على الخصم المحدد",
+    "bank_offer_sub_title_single": "ادفع قيمة مشترياتك عبر أحد بطاقات بنك :bank_name واحصل على خصم بنسبة "
+  },
+
+  "slider": {
+    "list_brand": {
+      "brands": "الماركات"
+    }
+  },
+
+  "home_page": {
+    "limit_product": {
+      "remain_time": "الوقت المتبقي"
+    },
+    "customer_opinion": {
+      "rating": " آراء العملاء"
+    }
+  },
+  "navbar_top": {
+    "cart_modal": {
+      "continueYourOrder": "استكمال الطلب"
+    }
+  },
+  "navbar_bottom": {
+    "links": {
+      "cart": "سلة",
+      "discount": "خصومات",
+      "categories": "الأقسام",
+      "home": "الرئيسية"
+    }
+  },
+  "footer": {
+    "new_letters": {
+      "subscribe": " اشترك الآن",
+      "email": "البريد الالكترونى"
+    },
+    "business_cert": {
+      "business": "موثق لدى منصة الأعمال  "
+    }
+  },
+  "cart_page": {
+    "content": {
+      "empty_cart": "سلة التسوق الخاصة بك فارغة",
+      "login_for_shopping": "قم بتسجيل الدخول لعرض عربة التسوق الخاصة بك وبدء التسوق",
+      "shopping": "تسوق الان"
+    }
+  },
+
+  "product_details": {
+    "details": {
+      "sale_status_false": "غير متوفر",
+      "sale_status_true": "متوفر",
+      "remain": "المتبقى"
+    },
+    "SimilarProducts": {
+      "similar_products": "منتجات مشابهة"
+    }
+  },
+  "categories": {
+    "title": "عنوان التصنيف"
+  }
+}

@@ -1,0 +1,38 @@
+<section class="s-block">
+    <div class="text-center mb-8">
+    
+    </div>
+   
+        <div class="text-center py-2 w-full mb-2 flex flex-col justify-center items-center md:gap-4 gap-4">
+          <h1 class="shamelBold md:text-[58px] md:leading-20 leading-14  md:w-[60%] w-full text-[40px]">   {{trans("home_page.customer_opinion.rating")}} </h1>
+          <div class="line"></div>
+
+        </div>
+
+    <div class="container">
+        <salla-slider   show-controls="false">
+            <div slot="items">
+                {% for slide in component.rates %}
+                    <div class="flex flex-col justify-start items-center space-4  !py-6 !px-4 mr-4 rounded-lg overflow-hidden" style="background-color:{{slide.background_color_rating}};width: 280px">
+                        <p class=" shamelBook md:!text-[24px] leading-8 !text-[20px] mb-6 h-16 overflow-hidden">{{slide.title}}</p>
+                        <h2 class="mb-4 shamelBold md:!text-[24px] !text-[20px]">{{slide.name}}</h2>
+                        {% set number = slide.star|json_encode() %}
+                        <div class="flex">
+                            {% for i in 1..number %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 33 30" fill="none">
+                                    <path d="M16.819 23.5923L26.6047 29.2917L24.0079 18.55L32.6535 11.3226L21.2685 10.3905L16.819 0.26001L12.3694 10.3905L0.984375 11.3226L9.63006 18.55L7.03319 29.2917L16.819 23.5923Z" fill="#FFAC0D"/>
+                                </svg>
+                            {% endfor %}
+                        </div>  
+                        <span class="hidden time-stamp">{{slide.date}}</span>
+                        <div class="insert-time mt-4 text-[#707070] text-lg"></div>
+
+
+                        
+                 
+                    </div>
+                {% endfor %}
+            </div>
+        </salla-slider>
+    </div>
+</section>

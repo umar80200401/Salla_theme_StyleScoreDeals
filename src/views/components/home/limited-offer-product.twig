@@ -1,0 +1,40 @@
+<section class="container s-block limit">
+	
+
+	<style>
+.countDown .s-count-down-list li{
+  color:var(--custom-text-color) !important;
+  background-color:var(--add_to_cart_button_color) !important;
+}
+  </style>
+
+	<div class="flex flex-col md:flex-row items-center justify-between mb-8">
+		<h2 class="shamelBold text-center md:text-start md:text-[40px] text-[30px] mb-6 md:mb-0">{{component.title}}</h2>
+		<div class="flex md:flex-row flex-col items-center justify-end gap-2">
+			<h2 class="shamelBold md:text text-center md:text-start-[36px] text-[20px]">{{trans("home_page.limit_product.remain_time")}}</h2>
+			<div class="countDown flex items-center justify-between">
+    
+				<salla-count-down
+                color="#baf2e5"
+                date="{{component.date}}"
+                digits="en"
+                size="md">
+                </salla-count-down>
+			</div>
+		</div>
+	</div>
+	<div id="offers-limit" class="w-full mx-auto">
+
+    <salla-slider show-controls="false" >
+    <div slot="items">
+
+            {% for product in component.products %}
+            <custom-salla-product-card isLimited product="{{product}}"></custom-salla-product-card>
+    
+   
+{% endfor %}
+
+</div>
+  </salla-slider>
+    </div>
+</section>

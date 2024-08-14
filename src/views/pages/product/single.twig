@@ -1,0 +1,657 @@
+{#
+| Variable                               | Type                        | Description                                                            |
+|----------------------------------------|-----------------------------|------------------------------------------------------------------------|
+| page                                   | object                      |                                                                        |
+| page.title                             | string                      | *could be html                                                         |
+| page.slug                              | string                      | ex: "cat.show"                                                         |
+| product                                | Product                     |                                                                        |
+| product.id                             | int                         |                                                                        |
+| product.name                           | string                      |                                                                        |
+| product.description                    | string                      | HTML                                                                   |
+| product.url                            | string                      |                                                                        |
+| product.promotion_title                | string                      |                                                                        |
+| product.subtitle                       | string                      |                                                                        |
+| product.type                           | string                      | product, service, group_products, codes, digital, food, donating       |
+| product.status                         | string                      | sale, out, out-and-notify                                              |
+| product.weight                         | ?string                     |                                                                        |
+| product.calories                       | ?float                      |                                                                        |
+| product.sku                            | ?string                     |                                                                        |
+| product.rating                         | ?Rating                     |                                                                        |
+| product.rating.count                   | int                         |                                                                        |
+| product.rating.stars                   | int                         |                                                                        |
+| product.price                          | float                       | can be string too `-`, when merchant doesn't want to show zero         |
+| product.sale_price                     | float                       |                                                                        |
+| product.regular_price                  | float                       |                                                                        |
+| product.starting_price                 | ?float                      |                                                                        |
+| product.quantity                       | ?int                        | if it's null, means it's unlimited                                     |
+| product.sold_quantity                  | int                         |                                                                        |
+| product.max_quantity                   | int                         |                                                                        |
+| product.discount_ends                  | ?date                       |                                                                        |
+| product.is_taxable                     | bool                        | Is the tax included in the price                                       |
+| product.category                       | ?Category                   |                                                                        |
+| product.category.name                  | string                      |                                                                        |
+| product.category.url                   | string                      |                                                                        |
+| product.image                          | object                      |                                                                        |
+| product.image.url                      | string                      |                                                                        |
+| product.image.alt                      | ?string                     |                                                                        |
+| product.images                         | array                       |                                                                        |
+| product.images[].id                    | int                         |                                                                        |
+| product.images[].url                   | string                      |                                                                        |
+| product.images[].alt                   | ?string                     |                                                                        |
+| product.images[].video_url             | ?string                     |                                                                        |
+| product.images[].type                  | string                      | `image` `video`                                                        |
+| product.brand                          | ?object                     |                                                                        |
+| product.brand.id                       | int                         |                                                                        |
+| product.brand.url                      | ?string                     |                                                                        |
+| product.brand.name                     | ?string                     |                                                                        |
+| product.brand.logo                     | ?string                     |                                                                        |
+| product.tags                           | ?Tags[] *Collection         |                                                                        |
+| product.tags[].name                    | string                      |                                                                        |
+| product.tags[].url                     | string                      |                                                                        |
+| product.options                        | ProductOption[] *Collection | @see views/pages/partials/product/options.twig                         |
+| product.notify_availability            | ?object                     | does product outOfStock & can visitor subscribe to notify availability |
+| product.notify_availability.channels   | array                       | ex: ['sms', 'email']                                                   |
+| product.notify_availability.subscribed | bool                        | Does user subscribed before                                            |
+| product.donation                       | ?ProductDonation            |                                                                        |
+| product.donation.target_message        | ?string                     | Message if reached to target or target expired                         |
+| product.donation.collected_amount      | float                       |                                                                        |
+| product.donation.target_amount         | float                       |                                                                        |
+| product.donation.target_percent        | float                       |                                                                        |
+| product.donation.target_end_date       | ?Date                       |                                                                        |
+| product.donation.can_donate            | bool                        | `true` When there is no campaign or (target not reached & not expired) |
+| product.has_read_more                  | bool                        |                                                                        |
+| product.can_add_note                   | bool                        |                                                                        |
+| product.can_show_remained_quantity     | bool                        |                                                                        |
+| product.can_show_sold                  | bool                        |                                                                        |
+| product.can_upload_file                | bool                        |                                                                        |
+| product.has_custom_form                | bool                        | Is it for  `Food` or `Custom Service` product                          |
+| product.has_options                    | bool                        |                                                                        |
+| product.is_on_sale                     | bool                        | Product has discounted price                                           |
+| product.is_hidden_quantity             | bool                        | The quantity is hidden by merchant, or product not available           |
+| product.is_available                   | bool                        |                                                                        |
+| product.is_in_wishlist                 | bool                        |                                                                        |
+| product.is_out_of_stock                | bool                        |                                                                        |
+| product.is_require_shipping            | bool                        |                                                                        |
+| product.base_currency_price            | float                       | product.price with base currency (SAR)                                 |
+| product.discount_percentage            | ?string                     | ex: "20%"                                                              |
+| product.has_3d_image                   | bool                        |                                                                        |
+| product.has_size_guide                 | bool                        |                                                                        |
+| product.is_giftable                    | bool                        |                                                                        |
+| product.add_to_cart_label              | string                      |                                                                        |
+| product.currency                       | string                      |                                                                        |
+#}
+{% extends "layouts.master" %}
+{% block content %}
+
+    {% if theme.settings.get("default_text_colour") == false %}
+
+        <style>
+            .s-block h1, .s-block h2, .s-block h3, .s-block h4, .s-block p, .s-block a, .s-button-text, .s-product-card-content h3, .s-product-card-content h3 a, #page-main-title, .main-content p,  .main-content p strong, .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content span, nav.breadcrumbs, .flex-col.h-\[400px\].justify-center.items-center.space-y-6.md\:flex.hidden, .container h1
+            {
+                color: {{ theme.settings.get("custom_text_colour") }} !important;
+            }
+        </style>
+    {% else %}
+        <style>
+            .s-block h1, .s-block h2, .s-block h3, .s-block h4, .s-block p, .s-block a, .s-button-text, .s-product-card-content h3, .s-product-card-content h3 a, #page-main-title, .main-content p,  .main-content p strong, .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content span, nav.breadcrumbs, .flex-col.h-\[400px\].justify-center.items-center.space-y-6.md\:flex.hidden, .container h1
+            {
+                color: #231f1e;
+            }
+        </style>
+
+    {% endif %}
+
+    {% if theme.settings.get("default_add_to_cart_colours") == false %}
+
+         <style>
+            salla-add-product-button .s-button-text:not(.new-design-product .s-button-text):not(.category-three .s-button-text)
+            {
+                background-color: {{ theme.settings.get("add_to_cart_button_colour") }};
+            }
+        </style>
+
+    {% else %}
+        <style>
+            salla-add-product-button .s-button-text:not(.new-design-product .s-button-text):not(.category-three .s-button-text)
+            {
+                background-color: #334155;
+                color: #fff;
+            }
+        </style>
+
+    {% endif %}
+        
+    <div class="container defult">
+        {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
+        <nav class="breadcrumbs w-full py-5">
+            <salla-breadcrumb></salla-breadcrumb>
+        </nav>
+        <div class="flex flex-col items-start md:flex-row" id="product-{{ product.id }}">
+
+
+
+            <div class="sidebar md:sticky top-24 w-full md:!w-2/4 rtl:ml-8 ltr:mr-8 pb-8 md:pb-16 overflow-hidden shrink-0 single-product-edit-slider">
+                {% set has_many_images = product.images|length > 1 %}
+                <salla-slider
+                        vertical-thumbs="true"
+                        id="details-slider-{{ product.id }}"
+                        class="details-slider rounded-md flex-row-reverse gap-2"
+                        type="thumbs"
+                        loop="false"
+                         show-controls="false"
+                        listen-to-thumbnails-option
+                        show-thumbs-controls="false">
+                    {% if product.promotion_title %}
+                        <div class="promotion-title">{{ product.promotion_title }}</div>
+                    {% endif %}
+
+                    <salla-button
+                            class="btn--wishlist animated hidden sws"
+                            data-id="{{ product.id }}"
+                            onclick="salla.wishlist.toggle({{ product.id }})"
+                            shape="icon"
+                            fill="outline"
+                            color="light">
+                        <i class="sicon-heart"></i>
+                    </salla-button>
+
+                    {# Calories Badge #}
+                    {% if product.calories %}
+                        <div class="absolute z-[2] top-4 rtl:left-4 ltr:right-4 bg-white shadow-sm flex flex-col justify-center items-center rounded-full w-20 h-20 md:w-24 md:h-24">
+                            <span class="text-red-500 text-xl leading-none font-bold">{{ product.calories }}</span>
+                            <span class="text-xs text-gray-500">{{ trans('pages.products.calories') }}</span>
+                        </div>
+                    {% endif %}
+
+                    <div slot="items">
+                        {% for image in product.images %}
+                            {% if image.three_d_image_url %}
+                                <model-viewer style="min-height: 500px;" class="swiper-slide model-entry w-full h-full"
+                                              loading="eager" camera-controls
+                                              touch-action="pan-y" auto-rotate
+                                              poster="{{ image.url }}"
+                                              src="{{ image.three_d_image_url }}"
+                                              shadow-intensity="1" alt="{{ image.alt }}">
+                                </model-viewer>
+                            {% else %}
+                                <a data-fslightbox="product_{{ product.id }}"
+                                   data-img-id="{{ image.id }}"
+                                   data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
+                                   data-caption="{{ image.alt }}"
+                                   data-infinite="false"
+                                   data-type="{{ image.video_url?'youtube':'image' }}"
+                                   href="{{ image.video_url?image.video_url:image.url }}"
+                                   aria-label="{{ product.name }}"
+                                   class="swiper-slide homeslider__slide {{ image.video_url?'video-entry':'' }}">
+                                    {% if loop.first %}
+                                        <img fetchpriority="high" loading="eager" src="{{ image.url }}"
+                                             alt="{{ image.alt }}"
+                                             class="h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
+                                    {% else %}
+                                        <img src="{{ image.url }}"
+                                             alt="{{ image.alt }}"
+                                             class="lazy h-full object-{{ theme.settings.get('slider_background_size') }} w-full {{ image.three_d_image_url ? 'model-poster' : '' }}">
+                                    {% endif %}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    {% if has_many_images %}
+                        <div slot="thumbs">
+                            {% for image in product.images %}
+                                <div class="slide--one-fourth {{ image.video_url?'video-entry':'' }} {{ image.three_d_image_url?'model-entry':'' }} md:!w-full ">
+                                    {% if loop.index < 5 %}
+                                        <img src="{{ image.url }}"
+                                             loading="eager"
+                                             class="object-contain w-full h-full bg-gray-100 "
+                                             title="{{ image.alt }}"
+                                             alt="{{ image.alt }}"/>
+                                    {% else %}
+                                        <img src="{{ image.url }}"
+                                             class="object-contain w-full h-full lazy bg-gray-100 "
+                                             title="{{ image.alt }}"
+                                             alt="{{ image.alt }}"/>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </salla-slider>
+            </div>
+
+            <div class="main-content w-full md:w-2/4 md:pb-16">
+
+                {% hook 'product:single.description.start' %}
+
+                {% if product.brand.name %}
+                    <div class="product-brand mb-5 w-12">
+                        <a class="brand-logo" href="{{ product.brand.url }}" title="{{ product.brand.name }}">
+                            <img width="100%" height="100%" class="max-h-full object-contain"
+                                 src="{{ product.brand.logo }}"
+                                 title="{{ product.brand.name }}"
+                                 alt="{{ product.brand.name }}">
+                        </a>
+                    </div>
+                {% endif %}
+
+                
+            
+                <div class="flex justify-between items-center shamelBook">
+                 
+                    
+                    <p class="color-grey text-lg mb-2">{{ trans('pages.products.tax_included') }}</p>
+                  
+          
+
+                
+                    <div class="flex justify-center items-center gap-1">
+                        <salla-social-share class="inline-flex"></salla-social-share>
+
+                        <salla-button
+                                class="btn--wishlist animated  sm:inline-flex"
+                                data-id="{{ product.id }}"
+                                onclick="salla.wishlist.toggle({{ product.id }})"
+                                shape="icon"
+                                fill="outline"
+                                color="light">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 62 68" fill="none">
+                                <path d="M31.1319 59.7198L27.4232 56.0595C14.2509 43.1097 5.55469 34.569 5.55469 24.0872C5.55469 15.5465 11.7444 8.83594 19.6222 8.83594C24.0726 8.83594 28.344 11.082 31.1319 14.6314C33.9198 11.082 38.1912 8.83594 42.6417 8.83594C50.5195 8.83594 56.7092 15.5465 56.7092 24.0872C56.7092 34.569 48.0129 43.1097 34.8406 56.0872L31.1319 59.7198Z" fill="#212121"/>
+                              </svg>
+                        </salla-button>
+                    </div>
+                </div>
+                    {% set product_desc = product.description|replace({"&nbsp;":"\n"}) %}
+
+                    <h1 class="text-xl md:text-2xl leading-10 font-medium mb-3 text-gray-800 shamelBold">{{ product.name }}</h1>
+
+
+                {% if product.subtitle %}
+                    <h3 class="product-entry__sub-title text-sm text-gray-400 leading-6 mb-2.5 shamelBook">
+                        {{ product.subtitle }}
+                    </h3>
+                {% endif %}
+
+            
+            <div class=" flex my-4 gap-1 items-center">
+            
+                {% if product.rating.count %}
+                {% if product.rating.count > 0 %}
+  <salla-rating-stars size="large" value="{{ product.rating.stars }}"
+                                        reviews="{{ product.rating.count }}"></salla-rating-stars>
+				{% endif %}
+				{% endif %}
+                       
+                    
+                            </div>
+      
+
+                {# Price #}
+            <div class="flex whitespace-nowrap gap-2 items-center -mr-1 shamelBold">
+                <img width="30" height="30" src="https://img.icons8.com/emoji/48/fire.png" alt="fire" class="w-7 h-7"/>
+                {% if product.is_on_sale %}
+                    <div class="flex items-center space-x-2 rtl:space-x-reverse whitespace-nowrap">
+                        <h4 class="text-[#334155] font-bold text-xl inline-block">{{product.sale_price|money}}</h4>
+                        <span class="before-sale text-center line-through font-bold text-[#404553] relative">
+                            {{product.regular_price|money}}
+                        </span>
+                    </div>
+                {% elseif product.starting_price %}
+                    <span>{{ trans('pages.products.starting_price') }}</span> 
+                    <h4 class="font-bold text-xl inline-block">{{product.starting_price|money}}</h4>
+                {% else %}
+                    <h4 class="font-medium text-xl inline-block">{{product.price|money}}</h4>
+                {% endif %}
+            </div>
+
+                <div class="product__description p-2 px-5 sm:p-1 leading-7 mb-3">
+                
+                </div>
+
+                {% if product.sold_quantity or product.can_show_remained_quantity %}
+                    <div class="flex items-center justify-start w-full gap-2 shamelBold">
+                {% else %}
+                    <div class="flex items-center justify-start w-full gap-2 shamelBold mb-4">
+                {% endif %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 89 70" fill="none">
+                        <g clip-path="url(#clip0_1072_446)">
+                            <path d="M53.3991 72.3887C62.8984 72.3887 72.0086 68.6584 78.7256 62.0184C85.4426 55.3785 89.2162 46.3727 89.2162 36.9824C89.2162 27.5921 85.4426 18.5864 78.7256 11.9464C72.0086 5.30646 62.8984 1.57617 53.3991 1.57617C43.8998 1.57617 34.7896 5.30646 28.0726 11.9464C21.3556 18.5864 17.582 27.5921 17.582 36.9824C17.582 46.3727 21.3556 55.3785 28.0726 62.0184C34.7896 68.6584 43.8998 72.3887 53.3991 72.3887ZM68.4709 30.6376L52.3532 46.5704C52.0205 46.9002 51.6253 47.1618 51.1902 47.3403C50.755 47.5187 50.2885 47.6106 49.8174 47.6106C49.3463 47.6106 48.8798 47.5187 48.4446 47.3403C48.0095 47.1618 47.6143 46.9002 47.2815 46.5704L40.1181 39.4892C39.4456 38.8244 39.0678 37.9226 39.0678 36.9824C39.0678 36.0422 39.4456 35.1405 40.1181 34.4757C40.7907 33.8108 41.7029 33.4373 42.654 33.4373C43.6051 33.4373 44.5173 33.8108 45.1898 34.4757L49.8174 39.0572L63.3992 25.6241C63.7322 25.2949 64.1276 25.0338 64.5627 24.8556C64.9978 24.6775 65.4641 24.5858 65.9351 24.5858C66.406 24.5858 66.8724 24.6775 67.3075 24.8556C67.7426 25.0338 68.1379 25.2949 68.4709 25.6241C68.8039 25.9533 69.0681 26.3441 69.2483 26.7742C69.4286 27.2043 69.5213 27.6653 69.5213 28.1309C69.5213 28.5964 69.4286 29.0574 69.2483 29.4875C69.0681 29.9176 68.8039 30.3084 68.4709 30.6376Z" fill="#0FA958"/>
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_1072_446">
+                                <rect width="89" height="103" fill="white"/>
+                            </clipPath>
+                        </defs>
+                    </svg>
+                    <p class="text-base">{{ product.status == "sale" ? trans("product_details.details.sale_status_true") : trans("product_details.details.sale_status_false") }}</p>
+                </div>
+
+
+
+                {% if product.tags|length and theme.settings.get('show_tags', true) %}
+                    <div class="mb-3">
+                        {% for tag in product.tags %}
+                            <a href="{{ tag.url }}"
+                               class="rtl:ml-2 ltr:mr-2 inline-flex  text-gray-500 hover:text-primary underline text-sm mb-1">{{ tag.name }}
+                                ,</a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+               
+
+                {% if product.sold_quantity or product.can_show_remained_quantity %}
+                    <div class="bg-white py-2.5 mb-5 rounded-md inline-flex flex-col text-sm gap-1">
+                        {% if product.sold_quantity %}
+                            <div class="flex items-center gap-1 px-1 text-red-400">
+                                <i class="sicon-fire rtl:ml-1.5 ltr:mr-1.5" style="width: 30px; height: 30px; font-size: 30px;"></i>
+                                {{ trans('pages.products.sold') }}
+                                <span>{{ pluralize('pages.products.sold_times', product.sold_quantity)|raw }}</span>
+                            </div>
+                        {% endif %}
+                        {% if product.can_show_remained_quantity %}
+                            <div id="product-stock" class="flex items-center justify-start w-full gap-2 mt-3 mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 57 73" fill="none">
+                                    <path d="M4.05556 64.8889C4.05556 69.35 7.70556 73 12.1667 73H44.6111C49.0722 73 52.7222 69.35 52.7222 64.8889V16.2222H4.05556V64.8889ZM12.1667 24.3333H44.6111V64.8889H12.1667V24.3333ZM42.5833 4.05556L38.5278 0H18.25L14.1944 4.05556H0V12.1667H56.7778V4.05556H42.5833Z" fill="#334155"/>
+                                </svg>
+                                <p class="text-base">{{ product.quantity ? product.quantity : "0" }} {{ trans("product_details.details.remain") }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+
+               
+                {% hook 'product:single.description' %}
+
+                {# Installment Methods #}
+                {% if product.has_metadata %}
+                <salla-metadata></salla-metadata>
+                {% endif %}
+                {% if product.show_availability %}
+                    <section class="bg-white p-5 rounded-md mb-5 last:mb-0">
+                        <div class="center-between">
+                            <label class="flex items-center text-base">
+                                <span class="sicon-location rtl:ml-1 ltr:mr-1"></span>
+                                <span class="inline-block">{{ trans('pages.products.availability') }}</span>
+                            </label>
+                            <div class="mt-1 sm:mt-0 sm:col-span-2 text-end">
+                                <div class="flex rtl:space-x-reverse space-x-3">
+                                    <a href="#!"
+                                       onclick="salla.event.dispatch('scopes::open', {mode: 'availability', product_id: {{ product.id }} })"
+                                       class="group text-primary flex items-center justify-center">
+                                        <span>{{ trans('pages.products.select_branch') }}</span>
+                                        <span class="sicon-keyboard_arrow_left mr-2 transition-all group-hover:-translate-x-1"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                {% endif %}
+
+
+
+
+                    <h1 class="text-xl md:text-xl leading-10 font-medium mb-3 text-gray-800 shamelBook">{{ product_desc|raw }}</h1>
+
+                    <salla-installment price="{{ product.price }}"></salla-installment>
+
+
+<div class="md:hidden block w-full py-3 space-y-6 ">
+
+
+
+
+{% if product.sku %}
+<div>
+   <h4 class="shamelBold"> {{ trans('pages.products.sku') }} : </h4>
+<p>{{product.sku}}</p>
+</div> 
+{% endif %}
+
+
+
+{% if product.weight %}
+<div>
+    <h4 class="shamelBold">{{ trans('pages.products.weight') }}:</h4>
+<p>{{product.weight}}</p>  
+</div>
+{% endif %}
+
+
+
+
+    
+
+
+
+</div>
+
+{% if theme.settings.get("feature_product_mob_switch") %}
+
+
+<div class=" grid grid-cols-2 gap-2 my-4">
+{% for feature in theme.settings.get("feature_product_mob") %}
+
+    <div class=" flex justify-start items-center p-2 rounded bg-[#D9D9D98F] gap-2 h-16">
+				<img class="object-fit w-10 h-10" src="{{feature.image}}" />
+        {% if user.language_code == "ar" %}
+            <p class=" font-semibold shamelBold">{{feature.des.ar}}</p>
+
+            {% else %}
+            <p class=" font-semibold shamelBold">{{feature.des.en}}</p>
+
+        {% endif %}
+    </div>
+{% endfor %}
+    </div>
+{% endif %}
+                <div class="sticky-product-bar">
+                    <form class="form product-form" enctype="multipart/form-data" method="post"
+                 
+                          onsubmit="return salla.form.onSubmit('cart.addItem', event)" >
+                        <input type="hidden" name="id" value="{{ product.id }}">
+
+
+                        {% hook 'product:single.form.start' %}
+
+                        {% include 'pages.partials.product.options'  %}
+
+                        {% hook 'product:single.form.end' %}
+
+
+                        <section class=" bg-white  rounded-md rounded-b-none " style="bottom: 50px !important ;z-index:44 !important">
+                            {# Quantity #}
+                            {% if product.is_hidden_quantity or product.type == 'booking' %}
+                                <input type="hidden" value="1" name="quantity"/>
+                            {% else %}
+                                <div class="sin sticky-product-bar__quantity  justify-center  md:justify-between items-center mt-2 mb-2">
+                                    {# <label class="form-label !mb-0 shamelBold flex justify-center items-center !text-2xl"> #}
+                                    <label class="form-label !mb-0 shamelBold justify-center items-center !text-2xl">
+                                    <p>
+                                    {{ trans('pages.products.quantity') }}
+                                    </p>
+                                        
+                                    </label>
+                                 {#   <salla-quantity-input max="{{ product.max_quantity }}" value="1" name="quantity"
+                                     class="border-gray-200 flex justify-center items-center"></salla-quantity-input> #}
+                                    <salla-quantity-input max="{{ product.max_quantity }}" value="1" name="quantity"
+                                     class="border-gray-200  justify-between items-center"></salla-quantity-input>
+                                </div>
+                            {% endif %}
+                            {# Add to cart #}
+                       
+                          <div class="singl_product_buttons">  
+
+{# CSS For Buttons Add To Cart & Buy Now #}
+                    <style>
+                           
+                            .singl_product_buttons {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                            }
+                            .s-add-product-button-main .s-button-wrap .s-button-text{
+                                color:#FFF !important;
+                            }
+                         {#  .s-add-product-button-main .s-button-wrap .s-button-text::before{
+                            content: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 15 16' fill='%23FFF' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7.44048 6.09524H8.92857V3.80952H11.1607V2.28571H8.92857V0H7.44048V2.28571H5.20833V3.80952H7.44048V6.09524ZM4.46429 12.9524C3.64583 12.9524 2.98363 13.6381 2.98363 14.4762C2.98363 15.3143 3.64583 16 4.46429 16C5.28274 16 5.95238 15.3143 5.95238 14.4762C5.95238 13.6381 5.28274 12.9524 4.46429 12.9524ZM11.9048 12.9524C11.0863 12.9524 10.4241 13.6381 10.4241 14.4762C10.4241 15.3143 11.0863 16 11.9048 16C12.7232 16 13.3929 15.3143 13.3929 14.4762C13.3929 13.6381 12.7232 12.9524 11.9048 12.9524ZM4.59077 10.4762L4.6131 10.3848L5.28274 9.14286H10.8259C11.3839 9.14286 11.875 8.83048 12.128 8.3581L15 3.01714L13.7054 2.28571H13.6979L12.8795 3.80952L10.8259 7.61905H5.60268L5.50595 7.41333L3.83929 3.80952L3.13244 2.28571L2.43304 0.761905H0V2.28571H1.4881L4.16667 8.06857L3.1622 9.93524C3.04315 10.1486 2.97619 10.4 2.97619 10.6667C2.97619 11.5048 3.64583 12.1905 4.46429 12.1905H13.3929V10.6667H4.77679C4.68006 10.6667 4.59077 10.5829 4.59077 10.4762Z' fill='white'/%3E%3C/svg%3E");
+                            margin-left:18px !important;
+                            margin-top:5px !important;
+                           } #}
+                            .s-add-product-button-mini-checkout-content span {
+                                margin-top: 30px !important;
+                                margin-left: 10px !important;
+                            } 
+                           
+                            button.btn--wishlist.animated.sm\:inline-flex.s-button-element.s-button-icon.s-button-outline.s-button-light-outline.s-button-loader-center {
+                                border: 2px solid #334155 !important;
+                                margin-top:5px !important;
+                            }
+                           
+                            button.s-social-share-btn.s-button-element.s-button-icon.s-button-outline.s-button-light-outline.s-button-loader-center {
+                                border: 2px solid #404553 !important;
+                            }
+                            .s-add-product-button-main salla-mini-checkout-widget {  
+                                --salla-fast-checkout-button-height: 48px;
+                                --salla-fast-checkout-button-width: 100%;
+                                --salla-fast-checkout-button-border-radius: 10px !important;
+                                background-color: var(--add_to_cart_button_color) !important;
+                                margin-top:3px !important;
+                                border-radius:10px;
+                            }
+                           .s-add-product-button-mini-checkout-content {
+                                font-family: 'shamelBold';
+                                
+                            }
+                            .s-add-product-button-main salla-mini-checkout-widget .s-add-product-button-mini-checkout-content{
+                                color:#FFF !important;
+                                 
+                            }
+                            
+                            .s-add-product-button-main salla-mini-checkout-widget .s-add-product-button-mini-checkout-content svg{
+                                fill:#FFF !important;
+                                /* display: none; */
+                            }
+                            .sicon-shopping:before {
+                                content: "\ef39";
+                                margin-top: 15px;
+                                position: absolute;
+                                z-index: 9;
+                                color: #FFF;
+                            }
+                            @media (min-width: 380px) {
+                            .sicon-shopping:before {
+                               
+                                margin-right: 5%;
+                              
+                            }
+                            }
+
+                             @media (min-width: 480px) {
+                            .sicon-shopping:before {
+                               
+                                margin-right: 8%;
+                              
+                            }
+                            }
+                              @media (min-width: 640px) {
+                            .sicon-shopping:before {
+                               
+                                margin-right: 6%;
+                              
+                            }
+                            }
+                            .s-quantity-input-input {
+                                width:100% !important;
+                                border-radius:0px;
+                            }
+
+                           salla-add-product-button .s-button-text:not(.new-design-product .s-button-text):not(.category-three .s-button-text) {
+                                border-radius: 10px !important;
+                               
+                                }
+
+                    </style>
+   {# End Of CSS For Buttons #}
+
+
+
+                            <salla-add-product-button
+                                    quick-buy
+                                    support-sticky-bar
+                                    amount="{{ product.base_currency_price }}"
+                                    class="add_to_cart_btn w-full sticky-product-bar__btn mt-2 sicon-shopping"
+                                    product-status="{{ product.status }}"
+                                    product-type="{{ product.type }}"
+                                    product-id="{{ product.id }}"
+                                    loader-position="end"
+                                    type="submit"
+                                    width="wide"
+                                    {# Notify availability props#}
+                                    {% if product.notify_availability %}
+                                        {{ product.notify_availability.subscribed ? 'is-subscribed' : '' }}
+                                        channels="{{ product.notify_availability.channels|join(',') }}"
+                                        subscribed-options="{{ product.notify_availability.subscribed_options|json_encode }}"
+                                        {{ product.notify_availability.options ? 'notify-options-availability' : '' }}
+                                    {% endif %}>
+                                     
+                            </salla-add-product-button>
+                           
+                            <salla-button
+                                class="btn--wishlist animated  sm:inline-flex"
+                                data-id="{{ product.id }}"
+                                onclick="salla.wishlist.toggle({{ product.id }})"
+                                shape="icon"
+                                fill="outline"
+                                color="light">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 62 68" fill="none">
+                                <path d="M31.1319 59.7198L27.4232 56.0595C14.2509 43.1097 5.55469 34.569 5.55469 24.0872C5.55469 15.5465 11.7444 8.83594 19.6222 8.83594C24.0726 8.83594 28.344 11.082 31.1319 14.6314C33.9198 11.082 38.1912 8.83594 42.6417 8.83594C50.5195 8.83594 56.7092 15.5465 56.7092 24.0872C56.7092 34.569 48.0129 43.1097 34.8406 56.0872L31.1319 59.7198Z" fill="#212121"/>
+                              </svg>
+                        </salla-button>
+                        </div>
+
+                        </section>
+                        {% if product.is_giftable %}
+                            <salla-gifting class="mt-5" widget-subtitle="{{ gifting_intro }}" product-id="{{ product.id }}"></salla-gifting>
+                        {% endif %}
+                    </form>
+                </div>
+
+                {% hook 'product:single.description.end' %}
+                <salla-quick-order class="mt-5 md:-mb-2 block"></salla-quick-order>
+            </div>
+        </div>
+       <salla-offer></salla-offer>
+    </div>
+</div>
+
+
+    <salla-comments item-id="{{product.id}}" type="{{product.type}}"></salla-comments>
+
+
+    <div class="container">
+    <div class="text-center mb-2 flex flex-col justify-center items-center">
+			<h1 class="mb-3 shamelBold leading-12 text-[40px]">{{trans("product_details.SimilarProducts.similar_products")}}</h1>
+			<div class="line"></div>
+
+    </div>
+        <salla-products-list source="related" source-value="{{product.id}}" ></salla-products-list>
+    </div>
+
+    
+
+    {# model tamara #}
+
+       
+{% endblock %}
+
+{% block scripts %}
+
+    <script defer src="{{ 'product.js' | asset }}"></script>
+   
+    {% if product.has_3d_image %}
+        <script type="module" defer src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    {% endif %}
+   
+{% endblock %}

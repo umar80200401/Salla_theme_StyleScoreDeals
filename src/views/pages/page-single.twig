@@ -1,0 +1,33 @@
+{#
+| Variable     | Type                  | Description |
+|--------------|-----------------------|-------------|
+| page         | Page                  |             |
+| page.title   | string                |             |
+| page.content | string                |             |
+| page.url     | string                |             |
+| page.slug    | string                |             |
+#}
+{% extends "layouts.master" %}
+{% block content %}
+    <div class="container">
+
+        {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
+        <nav class="breadcrumbs w-full py-5">
+            <salla-breadcrumb></salla-breadcrumb>
+        </nav>
+
+        <div class="flex justify-center">
+
+            <div class="content content--single-page w-full  bg-white rounded  mt-4 lg:mt-12">
+        {% if theme.settings.get("image_secodary_pages")  %}
+            <img src="{{theme.settings.get("image_secodary_pages")}}" class=" w-full mb-4"/>
+        {% endif %}
+                        <h1 class="font-bold text-2xl mb-6">{{ page.title }}</h1>
+                <div class="content-entry">
+                    {{ page.content|raw }}
+                </div>
+                {% component comments %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

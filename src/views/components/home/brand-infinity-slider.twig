@@ -1,0 +1,38 @@
+<div class="mx-auto max-w-7xl lg:w-full lg:max-w-none" id="elan-bannle">
+	<article class="elan">
+		<div class="relative flex py-2 s-block--animated-brands--marquee">
+		
+			<div class="flex s-block--animated-brands--marque" >
+				<div class=" marquee__group ">
+
+
+                {% for item in 1..4 %}
+                   {% for brand in component.brands %}
+                    <li style="animation-duration: 10000ms;">
+						<a href="{{brand.url}}">
+                                
+							<img  class=" w-[50px] h-[50px]" src="{{brand.image}}" />
+						</a>
+					</li>
+                {% endfor %} 
+                {% endfor %}
+					
+				
+
+				</div>
+				<div aria-hidden="true" class="marquee__group">
+					{% for item in 1..4 %}
+                   {% for brand in component.brands %}
+                    <li style="animation-duration: 10000ms;">
+						<a href="{{brand.url}}">
+                                
+							<img  class=" w-[50px] h-[50px]" src="{{brand.image}}" />
+						</a>
+					</li>
+                {% endfor %} 
+                {% endfor %}
+				</div>
+			</div>
+		</div>
+	</article>
+</div>

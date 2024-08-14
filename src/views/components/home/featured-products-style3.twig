@@ -1,0 +1,146 @@
+{#
+| Variable                      | Type      | Description                                                         |
+|-------------------------------|-----------|---------------------------------------------------------------------|
+| items                         | array     |                                                                     |
+| items[].title                 | string    | Section title                                                       |
+| items[].name                  | string    | Alias for title                                                     |
+| items[].type                  | string    | category,most_sales,latest_products,chosen_products                 |
+| items[].featured_product      | Product   |                                                                     |
+| items[].special_product.id    | string    | Product string id                                                   |
+| items[].special_product.title | string    | Product Name                                                        |
+| items[].products[]            | Product[] |                                                                     |
+| items[].limit                 | Int       | Number of products to be shown                                      |
+| items[].id                    | string    | Section id                                                          |
+| position                      | int       | Sorting number starts from zero                                     |
+#}
+<section class="s-block s-block--features-products {% if items | length > 1 %}two-cols{% endif %} container">
+    <div class="inner new-design-product">
+{% for section in items %}
+<div class="grid">
+     <div class="mb-4 ">
+          <div>
+            <h2 class="w-fit mb-8 shamelBold  !text-3xl !font-extrabold relative pb-2 after:absolute after:-bottom-4 after:right-0 after:w-full after:h-[10px] after:rounded-lg after:bg-[#404553]">{{section.title}}</h2>
+          </div>
+        </div>
+<div class="flex gap-4 flex-col lg:flex-row sm:gap-8">
+    {% if section.featured_product %}
+        <div id="featured-product-{{ section.featured_product.id }}" class=" lg:w-[60%] w-full">
+        
+              <div id="
+            {{section.featured_product.id}}
+
+          
+         " class="product-entry product-entry--full-image overflow-hidden !bg-[#EAE9E9] !h-[400px] lg:!h-full" style="border-radius:40px;">
+            <a href="{{section.featured_product.url}}" class="relative w-full h-full overflow-hidden rounded-md hover:opacity-90">
+              <img class="object-cover w-full h-full lazy loaded" src="{{section.featured_product.image.url}}"  alt=" {{section.featured_product.image.alt}}"loading="lazy">
+            </a>
+            <a href="{{section.featured_product.url}}" class="absolute top-0 bottom-0 left-0 right-0 transition-opacity duration-700  rounded-2xl" ></a>
+            <div class="absolute  w-full h-full flex justify-center items-center">
+              <div class="flex items-baseline justify-center">
+  
+                <h3 class="mb-2 text-sm font-bold leading-6 text-white product-entry__title">
+                  <a href="{{section.featured_product.url}}" class="shamelBold text-white text-[38px]" style="background-color : #404553 ; padding: 13px 18px; border-radius : 20px"> {{trans("cart_page.content.shopping")}}</a>
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+    {% endif %}
+
+    <div class="grid grid-cols-2 lg:grid-cols-1 gap-4 lg:w-[38%] w-full sm:gap-8 relative" >
+
+    {% for product in section.products|slice(0,2) %}
+    <div  class="product-entry product-entry--minimal flex flex-col items-center justify-center overflow-hidden " style=" border-radius : 40px ; background-color : #EAE9E9">
+            <div class=" w-full lg:h-44 md:h-62  h-43 " >
+              <a href="{{product.id}}">
+                <img class=" w-full h-full lazy loaded" src="{{product.image.url}}"  alt="{{product.image.alt}}  " loading="lazy" >
+              </a>
+            </div>
+ 
+
+              
+                     <div class="category-three flex gap-1 flex-col items-center justify-center  mt-auto absolute" style=" top: 18px ; right:7px">
+          
+          <div class="wishlist h-[30px] w-[30px] flex justify-center items-center" >
+          <salla-button onclick="salla.wishlist.toggle({{product.id}})" shape="icon" fill="outline" color="primary" aria-label="wishlist button" class=" s-button-wrap hydrated">
+            <svg xmlns="http://www.w3.org/2000/svg" width="47" height="48" viewBox="0 0 47 48" fill="none">
+            <path d="M23.1506 42.4608L20.3714 39.8758C10.5006 30.7304 3.98389 24.6987 3.98389 17.2962C3.98389 11.2646 8.62222 6.52539 14.5256 6.52539C17.8606 6.52539 21.0614 8.11164 23.1506 10.6183C25.2397 8.11164 28.4406 6.52539 31.7756 6.52539C37.6789 6.52539 42.3172 11.2646 42.3172 17.2962C42.3172 24.6987 35.8006 30.7304 25.9297 39.8954L23.1506 42.4608Z" fill="#212121"/>
+            </svg>
+          </salla-button>
+        </div>
+        
+                <div class="quickview-btn eye-icon h-[30px] w-[30px] flex justify-center items-center" onclick="app.clickModal({{product.id}})" data-product-id="{{product.id}}">
+                    <salla-button  fill="outline"  class="s-button-wrap hydrated flex justify-center items-center" shape="btn" color="primary" size="medium" width="normal">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="44" height="45" viewBox="0 0 44 45" fill="none">
+                    <path d="M21.6507 8.90039C12.6924 8.90039 5.04197 14.6021 1.94238 22.6504C5.04197 30.6987 12.6924 36.4004 21.6507 36.4004C30.6091 36.4004 38.2595 30.6987 41.3591 22.6504C38.2595 14.6021 30.6091 8.90039 21.6507 8.90039ZM21.6507 31.8171C16.7057 31.8171 12.6924 27.7104 12.6924 22.6504C12.6924 17.5904 16.7057 13.4837 21.6507 13.4837C26.5957 13.4837 30.6091 17.5904 30.6091 22.6504C30.6091 27.7104 26.5957 31.8171 21.6507 31.8171ZM21.6507 17.1504C18.6765 17.1504 16.2757 19.6071 16.2757 22.6504C16.2757 25.6937 18.6765 28.1504 21.6507 28.1504C24.6249 28.1504 27.0257 25.6937 27.0257 22.6504C27.0257 19.6071 24.6249 17.1504 21.6507 17.1504Z" fill="#212121"/>
+                    </svg>
+
+                    </salla-button>
+                </div>
+              <div class="addToCart h-[30px] w-[30px] flex justify-center items-center">
+                <salla-add-product-button shape="icon" class="addToCart__btn hydrated flex justify-center " product-id="{{product.id}}" product-status="sale" fill="outline" product-type="product">
+                <svg xmlns="http://www.w3.org/2000/svg" width="31" height="36" viewBox="0 0 31 36" fill="none">
+<path d="M15.6794 13.5916H18.6821V8.53302H23.1861V5.16063H18.6821V0.102051H15.6794V5.16063H11.1754V8.53302H15.6794V13.5916ZM9.67405 28.7673C8.02258 28.7673 6.68639 30.2849 6.68639 32.1397C6.68639 33.9946 8.02258 35.5121 9.67405 35.5121C11.3255 35.5121 12.6767 33.9946 12.6767 32.1397C12.6767 30.2849 11.3255 28.7673 9.67405 28.7673ZM24.6874 28.7673C23.036 28.7673 21.6998 30.2849 21.6998 32.1397C21.6998 33.9946 23.036 35.5121 24.6874 35.5121C26.3389 35.5121 27.6901 33.9946 27.6901 32.1397C27.6901 30.2849 26.3389 28.7673 24.6874 28.7673ZM11.3255 20.3364H22.5105C23.6365 20.3364 24.6274 19.645 25.1378 18.5996L30.933 6.77938L28.3207 5.16063L22.5105 16.964H11.9711L5.57539 1.78824H0.666016V5.16063H3.66869L9.07351 17.9588L7.04671 22.0732C5.95073 24.3327 7.39201 27.0812 9.67405 27.0812H27.6901V23.7088H9.67405L11.3255 20.3364Z" fill="black"/>
+</svg>
+                </salla-add-product-button>
+              </div>
+            </div>
+
+
+
+            <div class="flex flex-col  p-2 overflow-hidden w-[80%] product-entry__content h-full   justify-between items-center gap-1">
+            
+            <h3 class="product-entry__title leading-6  max-w-full flex justify-center items-center ">
+              
+                <a href="{{product.url}}" class="  shamelBook h-6  overflow-hidden !text-[16px]  text-center w-full">{{product.name}}</a>
+              </h3>
+              <div class="flex flex-col justify-center items-center gap-2 w-full">
+              <div class="w-full  text-[15px] flex justify-center items-center shamelBold ">
+                {% if product.is_on_sale %}
+              <div class="shamelBold flex justify-center items-center gap-2 ">
+                  <h4 class=" text-center text-[#F77171]">{{ product.sale_price|money }}</h4>
+                  <span class="before-sale text-center line-through  font-bold text-[#404553] relative">
+                
+               {{ product.regular_price|money }}
+                </span>
+                  
+                </div>
+          
+        {% else %}
+            <h4 class="shamelBold">{{ product.price|money }}</h4>
+        {% endif %}
+
+                
+                  
+              </div>
+              <div class="w-full rounded-md py-1 mb-2 bg-[#334155] flex items-center justify-center">
+				
+            <salla-add-product-button width="wide" product-id="{{product.id}}">
+            
+       </salla-add-product-button>
+          </div> 
+              </div>
+              
+              
+             
+            </div>
+          </div>
+
+    
+    
+        
+    {% endfor %}
+    </div>
+    
+    </div>
+    </div>
+{% endfor %}
+    </div>
+</section>
+ 
+
+    
+    
+       

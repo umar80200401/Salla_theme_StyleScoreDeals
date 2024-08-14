@@ -1,0 +1,27 @@
+<section class="s-block">
+
+
+<div class="w-full flex flex-col justify-center items-center text-center gap-8">
+  <h1 class="shamelBold md:text-[64px] text-[40px]">{{component.title}}</h1>
+  <h3 class="shamelMid md:text-[35px] text-[30px] text-[#707070]">{{component.subtitle}}</h3>
+
+</div>
+
+
+
+  <div class="container mx-auto px-4 mt-8" id="slider-feature-product">
+  <salla-slider  show-controls="false" >
+        <div slot="items">
+
+    {% for product in component.products %}
+    
+            <custom-salla-product-card colorf="{{component.background_color}}" changeColor isFeatured product="{{product}}"></custom-salla-product-card>
+      
+           
+
+    
+          {% endfor %}  
+             </div>
+  </salla-slider>
+  </div>
+</section>
